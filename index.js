@@ -75,6 +75,10 @@ exports.random = function(stuff) {
 }
 
 
+// select a random object from an array (stuff) 
+// but it uses getweight function to figure out the probability weights for its selection
+// example:
+// console.log(helpers.weightedRandom([1,2,3], function(n) { return n }))
 
 exports.weightedRandom = function(stuff,getweight) {
 
@@ -95,3 +99,19 @@ exports.weightedRandom = function(stuff,getweight) {
     return stuff[index]    
 }
 
+
+// receives a function and calls the callback with its returned values, regardless if the function is blocking or async
+exports.returnOrCallback = function (f,callback) { 
+    var returned = false
+    var ret = f(function (err,data) { 
+        if (returned) { throw "got return value but also callback was called"; return }
+        callback(err,data)
+    })
+    if (ret != undefined) { returned = true; callback(undefined,ret) }
+}
+
+
+// converts an blocking or async function to an async function
+exports.returnOrCallbackPack = function (f) {  
+    return function (callback) { exports.returnOrCallback(f,callback) }
+}
