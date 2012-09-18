@@ -51,12 +51,9 @@ exports.prettySize = function(bytes) {
 };
 
 
-
-
-var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''); 
-
-exports.uuid = function (len) { 
+exports.uuid = exports.generateid = exports.rndid = function (len,chars) { 
     if (!len) { len = 20 }
+    if (!chars) { chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('') }
     var uuid = []
     charlen = chars.length
     for (var i = 0; i < len; i++) uuid[i] = chars[ 0 | Math.random() * charlen ];
@@ -114,4 +111,15 @@ exports.returnOrCallback = function (f,callback) {
 // converts an blocking or async function to an async function
 exports.returnOrCallbackPack = function (f) {  
     return function (callback) { exports.returnOrCallback(f,callback) }
+}
+
+
+exports.identity = function (x) { return x }
+
+exports.copy = function (obj) {
+    if (obj.constructor == Array) { 
+        return _.map(obj,exports.identity)
+    } else {
+        throw "dunno"
+    }
 }
