@@ -51,12 +51,9 @@ exports.prettySize = function(bytes) {
 };
 
 
-
-
-var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''); 
-
-exports.uuid = function (len) { 
+exports.uuid = exports.generateid = exports.rndid = function (len,chars) { 
     if (!len) { len = 20 }
+    if (!chars) { chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('') }
     var uuid = []
     charlen = chars.length
     for (var i = 0; i < len; i++) uuid[i] = chars[ 0 | Math.random() * charlen ];
@@ -129,4 +126,12 @@ exports.reverseCallbackWrap = function (f) {
 }
 
 
+exports.identity = function (x) { return x }
 
+exports.copy = function (obj) {
+    if (obj.constructor == Array) { 
+        return _.map(obj,exports.identity)
+    } else {
+        throw "dunno"
+    }
+}
