@@ -10,10 +10,9 @@ exports.returnorcallback = function(test){
     var test2 = function () { return 3 }    
     
     async.parallel({
-        f1: helpers.returnOrCallbackPack(test1),
-        f2: helpers.returnOrCallbackPack(test2)
+        f1: helpers.forceCallbackWrap(test1),
+        f2: helpers.forceCallbackWrap(test2)
     }, function (err,data) {
-//        console.log(err,data)
         test.done()
     })
 }

@@ -101,17 +101,32 @@ exports.weightedRandom = function(stuff,getweight) {
 
 
 // receives a function and calls the callback with its returned values, regardless if the function is blocking or async
-exports.returnOrCallback = function (f,callback) { 
+exports.forceCallback = function (f,callback) { 
     var returned = false
-    var ret = f(function (err,data) { 
-        if (returned) { throw "got return value but also callback was called"; return }
-        callback(err,data)
-    })
+    
+    try {
+        var ret = f(function (err,data) { 
+            if (returned) { throw "got return value but also callback was called"; return }
+            callback(err,data)
+        })
+    } catch (err) { 
+        callback(err,undefined)
+        return
+    }
     if (ret != undefined) { returned = true; callback(undefined,ret) }
 }
 
 
 // converts an blocking or async function to an async function
-exports.returnOrCallbackPack = function (f) {  
-    return function (callback) { exports.returnOrCallback(f,callback) }
+exports.forceCallbackWrap = function (f) {  
+    return function (callback) { exports.forceCallback(f,callback) }
 }
+
+// reverses err and data for a callback...
+// used for async.js calls usually when I don't want to exit on error but on data..
+exports.reverseCallbackWrap = function (f) {
+    return function (err,data) { return f(data,err) }
+}
+
+
+
