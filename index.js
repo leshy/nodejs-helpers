@@ -110,6 +110,7 @@ exports.forceCallback = function (f,callback) {
         callback(err,undefined)
         return
     }
+    
     if (ret != undefined) { returned = true; callback(undefined,ret) }
 }
 
@@ -134,4 +135,18 @@ exports.copy = function (obj) {
     } else {
         throw "dunno"
     }
+}
+
+exports.trim = function (str, chars) {
+	return exports.ltrim(exports.rtrim(str, chars), chars);
+}
+ 
+exports.ltrim = function (str, chars) {
+	chars = chars || "\\s";
+	return str.replace(new RegExp("^[" + chars + "]+", "g"), "");
+}
+ 
+exports.rtrim = function (str, chars) {
+	chars = chars || "\\s";
+	return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
 }
