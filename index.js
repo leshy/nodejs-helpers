@@ -8,6 +8,10 @@ exports.cb = function() {
     if (callback) { callback.apply(this,args) }
 }
 
+exports.cbc = function(callback) { 
+    if (callback) { return callback } else { return function () {} }
+}
+
 // converts retarded magical arguments object to an Array object
 exports.toArray = function(arg) { return Array.prototype.slice.call(arg); }
 
