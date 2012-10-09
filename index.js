@@ -110,7 +110,7 @@ exports.forceCallback = function (f,callback) {
             if (returned) { throw "got return value but also callback was called"; return }
             callback(err,data)
         })
-    } catch (err) { 
+    } catch (err) {
         callback(err,undefined)
         return
     }
@@ -153,4 +153,20 @@ exports.ltrim = function (str, chars) {
 exports.rtrim = function (str, chars) {
 	chars = chars || "\\s";
 	return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
+}
+
+exports.maybeiterate = function (something,callback) {
+    if (!something) { callback(); return }
+
+    if ((something.constructor == Array) || (something.constructor == Object)) {
+        _.map(something,callback)
+        return
+    }
+
+    if ((typeof(something) == 'object') && something.each && (something.each.constructor == Function)) {
+        something.each(callback)
+        return
+    }
+
+    callback(something)   
 }
