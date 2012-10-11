@@ -170,3 +170,9 @@ exports.maybeiterate = function (something,callback) {
 
     callback(something)   
 }
+
+
+exports.Minute = 1000 * 60
+exports.Hour = exports.Minute * 60
+exports.Day = exports.Hour * 24
+exports.Month = exports.Day * 30
