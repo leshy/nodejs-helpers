@@ -176,3 +176,4 @@ exports.Minute = 1000 * 60
 exports.Hour = exports.Minute * 60
 exports.Day = exports.Hour * 24
 exports.Month = exports.Day * 30
+exports.Now = function () { return new Date().getTime() }
