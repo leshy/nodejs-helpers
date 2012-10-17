@@ -13,7 +13,7 @@ exports.cbc = function(callback) {
 }
 
 // converts retarded magical arguments object to an Array object
-exports.toArray = function(arg) { return Array.prototype.slice.call(arg); }
+var toArray = exports.toArray = function(arg) { return Array.prototype.slice.call(arg); }
 
 // Takes a date object and returns a string
 exports.prettyDate = function(date){
@@ -128,6 +128,20 @@ exports.forceCallbackWrap = function (f) {
 // used for async.js calls usually when I don't want to exit on error but on data..
 exports.reverseCallbackWrap = function (f) {
     return function (err,data) { return f(data,err) }
+}
+
+
+exports.throwToCallback = function (f) {
+    return function () {
+        args = toArray(arguments)
+        callback = args.pop()
+        try {
+            var ret = f.apply(this,args)
+        } catch(err) {
+            callback(err) return
+        }
+        callback(undefined,ret)
+    }
 }
 
 
