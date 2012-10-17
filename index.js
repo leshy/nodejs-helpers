@@ -185,6 +185,10 @@ exports.maybeiterate = function (something,callback) {
     callback(something)   
 }
 
+exports.hashmap = function (hash,callback) {
+    for (property in hash) { hash[property] = callback(hash[property], property) }
+}
+
 
 exports.Minute = 1000 * 60
 exports.Hour = exports.Minute * 60
