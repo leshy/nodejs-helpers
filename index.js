@@ -138,7 +138,7 @@ exports.throwToCallback = function (f) {
         try {
             var ret = f.apply(this,args)
         } catch(err) {
-            callback(err) return
+            callback(err); return
         }
         callback(undefined,ret)
     }
