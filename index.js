@@ -169,6 +169,8 @@ exports.rtrim = function (str, chars) {
 	return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
 }
 
+exports.capitalize = function (str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
 exports.maybeiterate = function (something,callback) {
     if (!something) { callback(); return }
 
@@ -182,13 +184,27 @@ exports.maybeiterate = function (something,callback) {
         return
     }
 
-    callback(something)   
+    callback(something)
+}
+
+exports.unimap = function (something,callback) {
+    if (something.constructor == Array) { return _.map(something,callback) }
+    if (something.constructor == Object) { return exports.hashmap(something,callback) }
+    return callback(something)
 }
 
 exports.hashmap = function (hash,callback) {
-    for (property in hash) { hash[property] = callback(hash[property], property) }
+    var ret = {}
+    for (property in hash) { ret[property] = callback(hash[property], property) }
+    return ret
 }
 
+exports.find = function (collection,callback) {
+    for (i in collection) {
+        var ret = callback(collection[i], i)
+        if (ret) { return ret }
+    }
+}
 
 exports.Minute = 1000 * 60
 exports.Hour = exports.Minute * 60
