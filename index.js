@@ -195,3 +195,10 @@ exports.Hour = exports.Minute * 60
 exports.Day = exports.Hour * 24
 exports.Month = exports.Day * 30
 exports.Now = function () { return new Date().getTime() }
+
+// I want my push to return the resulting array..
+exports.push = function () {
+    var args = exports.toArray(arguments)
+    var array = args.shift()
+    array.push.apply(array,args)
+}
