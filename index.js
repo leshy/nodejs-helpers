@@ -217,4 +217,5 @@ exports.push = function () {
     var args = exports.toArray(arguments)
     var array = args.shift()
     array.push.apply(array,args)
+    return array
 }
