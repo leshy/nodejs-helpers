@@ -175,11 +175,13 @@ exports.maybeiterate = function (something,callback) {
 
     if ((something.constructor == Array) || (something.constructor == Object)) {
         _.map(something,callback)
+        callback();
         return
     }
 
     if ((typeof(something) == 'object') && something.each && (something.each.constructor == Function)) {
         something.each(callback)
+        callback();
         return
     }
 
@@ -231,3 +233,4 @@ exports.todict = function (array) {
     _.map(array, function (x) { ret[x] = true })
     return ret
 }
+
