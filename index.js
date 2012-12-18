@@ -148,9 +148,13 @@ exports.identity = function (x) { return x }
 exports.copy = function (obj) {
     if (obj.constructor == Array) { 
         return _.map(obj,exports.identity)
-    } else {
-        throw "dunno"
     }
+    
+    if (obj.constructor == Object) {
+        return _.extend({},obj)
+    }
+
+    throw "dunno"
 }
 
 exports.trim = function (str, chars) {
