@@ -173,6 +173,7 @@ exports.rtrim = function (str, chars) {
 
 exports.capitalize = function (str) { return str.charAt(0).toUpperCase() + str.slice(1); }
 
+// this thing should accept an non iterable object and callback only once.. 
 // try to iterate through an object, call a callback with the object itself if you fail
 exports.maybeiterate = function (something,callback) {
     if (!something) { callback(); return }
@@ -199,6 +200,7 @@ exports.unimap = function (something,callback) {
     return callback(something)
 }
 
+// this thing should accept an non iterable object and callback only once.. 
 exports.hashmap = function (hash,callback) {
     var ret = {}
     for (property in hash) { ret[property] = callback(hash[property], property) }
@@ -232,9 +234,45 @@ exports.isEmpty = function (ob){
 
 // convert an array to dict of a form { entry: true, entry2: true }
 // used in order to utilize quick searching through the dict data structure vs the array one
-exports.todict = function (array) {
+exports.arraytodict = function (array) {
     var ret = {}
     _.map(array, function (x) { ret[x] = true })
     return ret
 }
+
+
+exports.dictadd = dictadd = function (dict,key,value) {
+    if (!dict[key]) { dict[key] = [] }
+    dict[key].push(value)
+}
+
+
+exports.objorclass = objorclass = function (obj,name) {
+    if (obj.constructor == Function) {
+        return obj.prototype[name]
+    } else {
+        return obj[name]
+    }
+}
+
+
+exports.makedict = makedict = function (objects,key) {
+    dict = {}
+    
+    _.map(objects, function (obj) {
+        if (key.constructor == String) {
+            keyval = obj[key]
+            console.log("KEYV",keyval, obj.key)
+        } else {
+            keyval = key(obj)
+        }
+
+        dictadd(dict,keyval,obj)
+
+    })
+    
+    return dict
+}
+
+exports.makelist = function (dict) { return _.flatten(_.values(dict)) }
 
