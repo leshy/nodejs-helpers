@@ -69,6 +69,11 @@ exports.normalize = function(list) {
 }
 
 
+exports.randrange = function (x) {
+    return Math.floor(Math.random() * x + 1)
+}
+
+
 exports.random = function(stuff) {
     return stuff[Math.floor(Math.random() * stuff.length)]
 }
@@ -262,7 +267,6 @@ exports.makedict = makedict = function (objects,key) {
     _.map(objects, function (obj) {
         if (key.constructor == String) {
             keyval = obj[key]
-            console.log("KEYV",keyval, obj.key)
         } else {
             keyval = key(obj)
         }
