@@ -16,3 +16,24 @@ exports.returnorcallback = function(test){
         test.done()
     })
 }
+
+
+exports.parallelbucket = function (test) {
+    
+    function makewaiter (n) {
+        return function (callback) { setTimeout(callback,n) }
+    }
+    
+    var bucket = new helpers.parallelbucket()
+
+    makewaiter(50)(bucket.cb())
+    makewaiter(60)(bucket.cb())
+    makewaiter(70)(bucket.cb())
+    makewaiter(80)(bucket.cb())
+    makewaiter(90)(bucket.cb())
+
+    test.equals(bucket.n, 5)
+
+    bucket.ondone( function() { test.done() } )
+
+}

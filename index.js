@@ -280,3 +280,32 @@ exports.makedict = makedict = function (objects,key) {
 
 exports.makelist = function (dict) { return _.flatten(_.values(dict)) }
 
+
+
+var parallelbucket = exports.parallelbucket = function () {
+    this.n = 0
+    this.done = true
+    this.subs = []
+}
+
+parallelbucket.prototype.cb = function () {
+    this.n++
+    this.done = false
+
+    var self = this
+
+    return function () { 
+        self.n--
+        if (self.n == 0) { 
+            self.done = true 
+            _.map(self.subs, function (sub) { sub()})
+        }
+    }
+}
+
+parallelbucket.prototype.ondone = function (callback) { 
+    if (this.done) { callback() } 
+    else { this.subs.push(callback) }
+}
+
+
