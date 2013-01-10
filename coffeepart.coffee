@@ -1,4 +1,5 @@
 _ = require 'underscore'
+
 # receives a function and calls the callback with its returned values,
 # regardless if the function is blocking or async
 exports.forceCallback = forceCallback = (f,args...,callback) ->
