@@ -28,17 +28,20 @@
     var bucket, makewaiter;
     makewaiter = function(n) {
       return function(callback) {
-        return setTimeout(callback, n);
+        return setTimeout((function() {
+          return callback(void 0, 100 - n);
+        }), n);
       };
     };
     bucket = new helpers.parallelBucket();
     makewaiter(50)(bucket.cb());
     makewaiter(60)(bucket.cb());
-    makewaiter(70)(bucket.cb());
+    makewaiter(70)(bucket.cb('bla'));
     makewaiter(80)(bucket.cb());
     makewaiter(90)(bucket.cb());
     test.equals(bucket.n, 5);
-    return bucket.done(function() {
+    return bucket.done(function(err, data) {
+      console.log(err, data);
       test.equals(bucket.n, 0);
       return test.done();
     });

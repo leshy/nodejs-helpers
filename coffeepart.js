@@ -1,7 +1,8 @@
 (function() {
-  var forceCallback, forceCallbackWrap, parallelBucket, _;
+  var depthFirst, forceCallback, forceCallbackWrap, helpers, parallelBucket, _;
   var __slice = Array.prototype.slice, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   _ = require('underscore');
+  helpers = require('./index');
   exports.forceCallback = forceCallback = function() {
     var args, callback, f, ret, returned, _i;
     f = arguments[0], args = 3 <= arguments.length ? __slice.call(arguments, 1, _i = arguments.length - 1) : (_i = 1, []), callback = arguments[_i++];
@@ -32,22 +33,53 @@
     this.n = 0;
     this._done = true;
     this.subs = [];
+    this.data = {};
+    this.error = void 0;
     return this;
   };
-  parallelBucket.prototype.cb = function() {
+  parallelBucket.prototype.cb = function(name) {
     this.n++;
     this._done = false;
-    return __bind(function() {
-      return --this.n || (this._done = true && _.map(this.subs, function(sub) {
-        return sub();
-      }));
+    if (!name) {
+      name = this.n;
+    }
+    return __bind(function(err, data) {
+      if (err) {
+        if (!this.error) {
+          this.error = {};
+        }
+        this.error[name] = err;
+      }
+      this.data[name] = data;
+      --this.n || (this._done = true && _.map(this.subs, __bind(function(sub) {
+        return sub(this.error, this.data);
+      }, this)));
     }, this);
   };
   parallelBucket.prototype.done = function(callback) {
     if (this._done) {
-      return callback();
+      return callback(this.error, this.data);
     } else {
       return this.subs.push(callback);
+    }
+  };
+  depthFirst = function(target, changecallback, clone, callback) {
+    var bucket, key, response;
+    if (target.constructor === Object || target.constructor === Array) {
+      if (clone) {
+        target = _.clone(target);
+      }
+      bucket = new parallelBucket();
+      for (key in target) {
+        this.depthfirst(target[key], changecallback, clone, function(data) {
+          return target[key] = data;
+        });
+      }
+      return target;
+    } else if (response = callback(target)) {
+      return response;
+    } else {
+      return target;
     }
   };
 }).call(this);
