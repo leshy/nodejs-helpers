@@ -104,29 +104,6 @@ exports.weightedRandom = function(stuff,getweight) {
 }
 
 
-// receives a function and calls the callback with its returned values, regardless if the function is blocking or async
-exports.forceCallback = function (f,callback) { 
-    var returned = false
-    
-    try {
-        var ret = f(function (err,data) { 
-            if (returned) { throw "got return value but also callback was called"; return }
-            callback(err,data)
-        })
-    } catch (err) {
-        callback(err,undefined)
-        return
-    }
-    
-    if (ret != undefined) { returned = true; callback(undefined,ret) }
-}
-
-
-// converts an blocking or async function to an async function
-exports.forceCallbackWrap = function (f) {  
-    return function (callback) { exports.forceCallback(f,callback) }
-}
-
 // reverses err and data for a callback...
 // used for async.js calls usually when I don't want to exit on error but on data..
 exports.reverseCallbackWrap = function (f) {
@@ -281,7 +258,7 @@ exports.makedict = makedict = function (objects,key) {
 exports.makelist = function (dict) { return _.flatten(_.values(dict)) }
 
 
-
+/*
 var parallelbucket = exports.parallelbucket = function () {
     this.n = 0
     this.done = true
@@ -307,5 +284,11 @@ parallelbucket.prototype.ondone = function (callback) {
     if (this.done) { callback() } 
     else { this.subs.push(callback) }
 }
+*/
 
+
+
+coffeepart = require('./coffeepart')
+
+_.extend(exports, coffeepart)
 
