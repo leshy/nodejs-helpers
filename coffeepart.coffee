@@ -12,7 +12,7 @@ exports.forceCallback = forceCallback = (f,args...,callback) ->
     catch error
         callback(error,undefined)
 
-    if ret then returned = true; callback(undefined,ret)
+    if ret isnt undefined then returned = true; callback(undefined,ret)
 
 # converts an blocking or async function to an async function
 exports.forceCallbackWrap = forceCallbackWrap = (f,args...) ->

@@ -106,7 +106,7 @@ exports.weightedRandom = function(stuff,getweight) {
 
 // reverses err and data for a callback...
 // used for async.js calls usually when I don't want to exit on error but on data..
-exports.reverseCallbackWrap = function (f) {
+exports.reverseCallbackWrap = exports.reverseCb = function (f) {
     return function (err,data) { return f(data,err) }
 }
 
@@ -191,7 +191,7 @@ exports.hashmap = function (hash,callback) {
 
 exports.hashfilter = function (hash,callback) {
     var ret = {}
-    for (property in hash) { var r = callback(hash[property], property); if (r) { ret[property] = r} }
+    for (property in hash) { var r = callback(hash[property], property); if (r != undefined) { ret[property] = r} }
     return ret
 }
 

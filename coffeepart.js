@@ -17,7 +17,7 @@
     } catch (error) {
       callback(error, void 0);
     }
-    if (ret) {
+    if (ret !== void 0) {
       returned = true;
       return callback(void 0, ret);
     }
