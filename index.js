@@ -139,7 +139,7 @@ exports.copy = function (obj) {
     throw "dunno"
 }
 
-exports.trim = function (str, chars) {
+exports.trim = exports.strip = function (str, chars) {
 	return exports.ltrim(exports.rtrim(str, chars), chars);
 }
  
@@ -182,10 +182,20 @@ exports.unimap = function (something,callback) {
     return callback(something)
 }
 
+exports.hashfromlist = function (list) {
+    ret = {}
+    _.map(list, function (elem) { ret[elem] = true })
+    return ret
+}
+
 // this thing should accept an non iterable object and callback only once.. 
 exports.hashmap = function (hash,callback) {
+    if (hash.constructor == Array) { hash = exports.hashfromlist(hash) }
     var ret = {}
-    for (property in hash) { ret[property] = callback(hash[property], property) }
+    for (property in hash) { 
+        res = callback(hash[property], property) 
+        if (res != undefined) { ret[property] = res }
+    }
     return ret
 }
 
@@ -238,7 +248,7 @@ exports.objorclass = objorclass = function (obj,name) {
 }
 
 
-exports.makedict = makedict = function (objects,key) {
+exports.makedict = makedict = function (elements,key) {
     dict = {}
     
     _.map(objects, function (obj) {
@@ -251,7 +261,6 @@ exports.makedict = makedict = function (objects,key) {
         dictadd(dict,keyval,obj)
 
     })
-    
     return dict
 }
 
