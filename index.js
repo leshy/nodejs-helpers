@@ -74,9 +74,6 @@ exports.randrange = function (x) {
 }
 
 
-exports.random = function(stuff) {
-    return stuff[Math.floor(Math.random() * stuff.length)]
-}
 
 
 // select a random object from an array (stuff) 

@@ -82,4 +82,19 @@
       return target;
     }
   };
+  exports.random = function(stuff) {
+    return stuff[Math.floor(Math.random() * stuff.length)];
+  };
+  exports.randompop = function(stuff) {
+    return stuff.splice(Math.floor(Math.random() * stuff.length), 1)[0];
+  };
+  exports.shuffle = function(stuff) {
+    var _results;
+    stuff = _.clone(stuff);
+    _results = [];
+    while (stuff.length) {
+      _results.push(exports.randompop(stuff));
+    }
+    return _results;
+  };
 }).call(this);
