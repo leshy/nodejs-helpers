@@ -59,6 +59,9 @@ exports.random = (stuff) -> stuff[Math.floor(Math.random() * stuff.length)]
 
 exports.randompop = (stuff) -> stuff.splice(Math.floor(Math.random() * stuff.length),1)[0]
 
+exports.remove = (stuff,element) -> stuff.splice(stuff.indexOf(element), 1); stuff
+
+
 exports.shuffle = (stuff) -> 
     stuff = _.clone(stuff)
     exports.randompop(stuff) while stuff.length 

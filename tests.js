@@ -46,4 +46,11 @@
       return test.done();
     });
   };
+  exports.remove = function(test) {
+    var a;
+    a = ['bla', 'blu', 'blo'];
+    helpers.remove(a, 'blu');
+    test.deepEqual(a, ['bla', 'blo']);
+    return test.done();
+  };
 }).call(this);

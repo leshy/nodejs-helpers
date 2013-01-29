@@ -88,6 +88,10 @@
   exports.randompop = function(stuff) {
     return stuff.splice(Math.floor(Math.random() * stuff.length), 1)[0];
   };
+  exports.remove = function(stuff, element) {
+    stuff.splice(stuff.indexOf(element), 1);
+    return stuff;
+  };
   exports.shuffle = function(stuff) {
     var _results;
     stuff = _.clone(stuff);

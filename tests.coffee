@@ -30,3 +30,8 @@ exports.parallelBucket = (test) ->
     bucket.done (err,data) -> console.log(err, data); test.equals bucket.n, 0; test.done()
 
 
+exports.remove = (test) ->
+    a = [ 'bla','blu', 'blo' ]
+    helpers.remove a, 'blu'
+    test.deepEqual a,  [ 'bla', 'blo' ]
+    test.done()
