@@ -47,10 +47,13 @@
     });
   };
   exports.remove = function(test) {
-    var a;
+    var a, b;
     a = ['bla', 'blu', 'blo'];
     helpers.remove(a, 'blu');
     test.deepEqual(a, ['bla', 'blo']);
+    b = ['bla', 'blu', 'blo'];
+    helpers.remove(b, 'hahaha');
+    test.deepEqual(b, ['bla', 'blu', 'blo']);
     return test.done();
   };
 }).call(this);

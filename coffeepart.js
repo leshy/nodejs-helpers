@@ -89,7 +89,11 @@
     return stuff.splice(Math.floor(Math.random() * stuff.length), 1)[0];
   };
   exports.remove = function(stuff, element) {
-    stuff.splice(stuff.indexOf(element), 1);
+    var i;
+    i = stuff.indexOf(element);
+    if (i !== -1) {
+      stuff.splice(i, 1);
+    }
     return stuff;
   };
   exports.shuffle = function(stuff) {

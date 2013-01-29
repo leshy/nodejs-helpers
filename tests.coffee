@@ -34,4 +34,8 @@ exports.remove = (test) ->
     a = [ 'bla','blu', 'blo' ]
     helpers.remove a, 'blu'
     test.deepEqual a,  [ 'bla', 'blo' ]
+
+    b = [ 'bla','blu', 'blo' ]
+    helpers.remove b, 'hahaha'
+    test.deepEqual b,  [ 'bla','blu', 'blo' ]
     test.done()
