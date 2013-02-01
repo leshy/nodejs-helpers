@@ -248,7 +248,7 @@ exports.objorclass = objorclass = function (obj,name) {
 exports.makedict = makedict = function (elements,key) {
     dict = {}
     
-    _.map(objects, function (obj) {
+    _.map(elements, function (obj) {
         if (key.constructor == String) {
             keyval = obj[key]
         } else {
