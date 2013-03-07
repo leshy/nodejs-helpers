@@ -67,4 +67,7 @@ exports.remove = (stuff,element) ->
 
 exports.shuffle = (stuff) -> 
     stuff = _.clone(stuff)
-    exports.randompop(stuff) while stuff.length 
+    exports.randompop(stuff) while stuff.length
+
+
+exports.commenterr = (err,comment) -> if err then comment + ": " + err else undefined
