@@ -39,3 +39,8 @@ exports.remove = (test) ->
     helpers.remove b, 'hahaha'
     test.deepEqual b,  [ 'bla','blu', 'blo' ]
     test.done()
+
+
+exports.extend = (test) ->
+    test.deepEqual helpers.extend({ bla: { a: 2} }, { bla: { b: 3 }, c: 4}), { bla: { a: 2, b: 3 }, c: 4 }
+    test.done()

@@ -79,3 +79,5 @@ exports.extend = extend = (destination, targets...) ->
             if destination[key]?.constructor is Object then destination[key] = extend destination[key], value
             else destination[key] = value
     destination
+
+
