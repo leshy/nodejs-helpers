@@ -76,6 +76,6 @@ exports.commenterr = (err,comment) -> if err then comment + ": " + err else unde
 exports.extend = extend = (destination, targets...) ->
     _.map targets, (target) ->
         _.map target, (value,key) ->
-            if destination[key]?.constructor is Object then destination[key] = extend {}, destination[key], value
+            if destination[key]?.constructor is Object then destination[key] = extend destination[key], value
             else destination[key] = value
     destination

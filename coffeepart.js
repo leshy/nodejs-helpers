@@ -136,7 +136,7 @@
       return _.map(target, function(value, key) {
         var _ref;
         if (((_ref = destination[key]) != null ? _ref.constructor : void 0) === Object) {
-          return destination[key] = extend({}, destination[key], value);
+          return destination[key] = extend(destination[key], value);
         } else {
           return destination[key] = value;
         }
