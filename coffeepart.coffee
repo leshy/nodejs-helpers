@@ -14,7 +14,7 @@ exports.forceCallback = forceCallback = (f,args...,callback) ->
 
     if ret isnt undefined then returned = true; callback(undefined,ret)
 
-# converts an blocking or async function to an async function
+# converts a blocking or an async function to an async function (when you want to accept both)
 exports.forceCallbackWrap = forceCallbackWrap = (f,args...) ->
     (callback) -> forceCallback.apply(this, [].concat(f,args,callback))
 
@@ -41,18 +41,13 @@ parallelBucket::cb = (name) ->
 
 parallelBucket::done = (callback) -> if @_done then callback(@error,@data) else @subs.push callback
 
-depthFirst = (target, changecallback, clone, callback) ->
+# depthfirst search and modify through JSON
+depthFirst = (target, clone, callback) ->
     if target.constructor is Object or target.constructor is Array
-        
-        if clone then target = _.clone target
-
-        bucket = new parallelBucket()
-        
         for key of target
-            @depthfirst target[key], changecallback, clone, (data) -> target[key] = data
-                
+            @depthfirst target[key], (data) -> if not data delete target[key] else target[key] = data
         target
-    else if response = callback(target) then response else target
+    else response = callback(target)
 
 exports.random = (stuff) -> stuff[Math.floor(Math.random() * stuff.length)]
 

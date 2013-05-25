@@ -74,23 +74,21 @@
     }
   };
 
-  depthFirst = function(target, changecallback, clone, callback) {
-    var bucket, key, response;
+  depthFirst = function(target, clone, callback) {
+    var key, response;
     if (target.constructor === Object || target.constructor === Array) {
-      if (clone) {
-        target = _.clone(target);
-      }
-      bucket = new parallelBucket();
       for (key in target) {
-        this.depthfirst(target[key], changecallback, clone, function(data) {
-          return target[key] = data;
+        this.depthfirst(target[key], function(data) {
+          if (!data(delete target[key])) {
+
+          } else {
+            return target[key] = data;
+          }
         });
       }
       return target;
-    } else if (response = callback(target)) {
-      return response;
     } else {
-      return target;
+      return response = callback(target);
     }
   };
 
