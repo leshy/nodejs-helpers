@@ -44,3 +44,23 @@ exports.remove = (test) ->
 exports.extend = (test) ->
     test.deepEqual helpers.extend({ bla: { a: 2} }, { bla: { b: 3 }, c: 4}), { bla: { a: 2, b: 3 }, c: 4 }
     test.done()
+
+
+exports.dictpush = (test) ->
+    dict = {}
+    helpers.dictpush dict, 'testkey1', 'val1'
+    helpers.dictpush dict, 'testkey1', 'val2'
+    helpers.dictpush dict, 'testkey1', 'val3'
+    helpers.dictpush dict, 'testkey2', 'val4'
+
+    test.deepEqual {"testkey1":["val1","val2","val3"],"testkey2":["val4"]}, dict
+
+    test.equals helpers.dictpop(dict, 'testkey1'), 'val3'
+    test.equals helpers.dictpop(dict, 'testkey1', 'val1'), 'val1'
+    test.equals helpers.dictpop(dict, 'testkey1'), 'val2'
+    test.equals helpers.dictpop(dict, 'testkey2'), 'val4'
+    test.equals helpers.dictpop(dict, 'testkey1'), undefined
+
+    test.deepEqual {}, dict
+    
+    test.done()

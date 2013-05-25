@@ -54,7 +54,6 @@ depthFirst = (target, changecallback, clone, callback) ->
         target
     else if response = callback(target) then response else target
 
-
 exports.random = (stuff) -> stuff[Math.floor(Math.random() * stuff.length)]
 
 exports.randompop = (stuff) -> stuff.splice(Math.floor(Math.random() * stuff.length),1)[0]
@@ -64,11 +63,9 @@ exports.remove = (stuff,element) ->
     if i != -1 then stuff.splice(i, 1)
     stuff
 
-
 exports.shuffle = (stuff) -> 
     stuff = _.clone(stuff)
     exports.randompop(stuff) while stuff.length
-
 
 exports.commenterr = (err,comment) -> if err then comment + ": " + err else undefined
 
@@ -79,5 +76,16 @@ exports.extend = extend = (destination, targets...) ->
             if destination[key]?.constructor is Object then destination[key] = extend destination[key], value
             else destination[key] = value
     destination
+
+
+exports.dictpush = (dict,key,value) ->
+    if not arr = dict[key] then arr = dict[key] = []
+    arr.push value
+
+exports.dictpop = (dict,key,value) ->
+    if not arr = dict[key] then return
+    if value then exports.remove arr, ret = value else ret = arr.pop()
+    if arr.length is 0 then delete dict[key]
+    ret
 
 

@@ -145,4 +145,28 @@
     return destination;
   };
 
+  exports.dictpush = function(dict, key, value) {
+    var arr;
+    if (!(arr = dict[key])) {
+      arr = dict[key] = [];
+    }
+    return arr.push(value);
+  };
+
+  exports.dictpop = function(dict, key, value) {
+    var arr, ret;
+    if (!(arr = dict[key])) {
+      return;
+    }
+    if (value) {
+      exports.remove(arr, ret = value);
+    } else {
+      ret = arr.pop();
+    }
+    if (arr.length === 0) {
+      delete dict[key];
+    }
+    return ret;
+  };
+
 }).call(this);

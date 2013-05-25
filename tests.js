@@ -84,4 +84,24 @@
     return test.done();
   };
 
+  exports.dictpush = function(test) {
+    var dict;
+    dict = {};
+    helpers.dictpush(dict, 'testkey1', 'val1');
+    helpers.dictpush(dict, 'testkey1', 'val2');
+    helpers.dictpush(dict, 'testkey1', 'val3');
+    helpers.dictpush(dict, 'testkey2', 'val4');
+    test.deepEqual({
+      "testkey1": ["val1", "val2", "val3"],
+      "testkey2": ["val4"]
+    }, dict);
+    test.equals(helpers.dictpop(dict, 'testkey1'), 'val3');
+    test.equals(helpers.dictpop(dict, 'testkey1', 'val1'), 'val1');
+    test.equals(helpers.dictpop(dict, 'testkey1'), 'val2');
+    test.equals(helpers.dictpop(dict, 'testkey2'), 'val4');
+    test.equals(helpers.dictpop(dict, 'testkey1'), void 0);
+    test.deepEqual({}, dict);
+    return test.done();
+  };
+
 }).call(this);

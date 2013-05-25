@@ -74,8 +74,6 @@ exports.randrange = function (x) {
 }
 
 
-
-
 // select a random object from an array (stuff) 
 // but it uses getweight function to figure out the probability weights for its selection
 // example:
@@ -107,7 +105,6 @@ exports.reverseCallbackWrap = exports.reverseCb = function (f) {
     return function (err,data) { return f(data,err) }
 }
 
-
 exports.throwToCallback = function (f) {
     return function () {
         args = toArray(arguments)
@@ -120,7 +117,6 @@ exports.throwToCallback = function (f) {
         callback(undefined,ret)
     }
 }
-
 
 exports.identity = function (x) { return x }
 
@@ -229,13 +225,7 @@ exports.arraytodict = function (array) {
     return ret
 }
 
-
-exports.dictadd = dictadd = function (dict,key,value) {
-    if (!dict[key]) { dict[key] = [] }
-    dict[key].push(value)
-}
-
-
+// read an attribute from an object or from a class
 exports.objorclass = objorclass = function (obj,name) {
     if (obj.constructor == Function) {
         return obj.prototype[name]
@@ -243,7 +233,6 @@ exports.objorclass = objorclass = function (obj,name) {
         return obj[name]
     }
 }
-
 
 exports.makedict = makedict = function (elements,key) {
     dict = {}
@@ -263,21 +252,15 @@ exports.makedict = makedict = function (elements,key) {
 
 exports.makelist = function (dict) { return _.flatten(_.values(dict)) }
 
-/**
- * Removes a module from the cache
- */
+// Removes a module from the cache
+// http://stackoverflow.com/questions/9210542/node-js-require-cache-possible-to-invalidate
 require.uncache = function (moduleName) {
     // Run over the cache looking for the files
     // loaded by the specified module name
-    searchCache(moduleName, function (mod) {
-        delete require.cache[mod.id];
-    });
-};
+    searchCache(moduleName, function (mod) { delete require.cache[mod.id] })
+}
 
-/**
- * Runs over the cache to search for all the cached
- * files
- */
+// Runs over the cache to search for all the cached
 searchCache = function (moduleName, callback) {
     // Resolve the module identified by the specified name
     var mod = require.resolve(moduleName);
@@ -300,8 +283,7 @@ searchCache = function (moduleName, callback) {
     }
 };
 
-
-// slowly rewriting this thing to js..
+// slowly rewriting this thing to coffeescript..
 coffeepart = require('./coffeepart')
 _.extend(exports, coffeepart)
 
