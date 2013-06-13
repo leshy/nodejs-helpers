@@ -68,10 +68,7 @@ exports.normalize = function(list) {
     return _.map(list,function(n) { return n / total })
 }
 
-
-exports.randrange = function (x) { return Math.floor(Math.random() * x + 1) }
-
-exports.RandomFloat = function RandomFloat(x) { return Math.random() * x }
+exports.RandomFloat = exports.randrange = function RandomFloat(x) { return Math.random() * x }
 exports.RandomInt = function RandomInt(x) { return Math.round(RandomFloat(x)) }
 exports.RandomBool = function RandomBool() { return Boolean(RandomInt(1)) }
 exports.RandomSign = function RandomSign() { return  (RandomBool()) ? 1 : -1 }
