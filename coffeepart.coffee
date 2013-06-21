@@ -58,7 +58,7 @@ exports.remove = (stuff,element) ->
     if i != -1 then stuff.splice(i, 1)
     stuff
 
-exports.shuffle = (stuff) -> 
+exports.shuffle = (stuff) ->
     stuff = _.clone(stuff)
     exports.randompop(stuff) while stuff.length
 
@@ -72,7 +72,7 @@ exports.extend = extend = (destination, targets...) ->
             else destination[key] = value
     destination
 
-
+# operations for dealing with a dictionary of arrays
 exports.dictpush = (dict,key,value) ->
     if not arr = dict[key] then arr = dict[key] = []
     arr.push value
@@ -82,5 +82,4 @@ exports.dictpop = (dict,key,value) ->
     if value then exports.remove arr, ret = value else ret = arr.pop()
     if arr.length is 0 then delete dict[key]
     ret
-
 
