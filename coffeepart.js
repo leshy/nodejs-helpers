@@ -167,4 +167,8 @@
     return ret;
   };
 
+  exports.wait = exports.sleep = exports.delay = function(ms, callback) {
+    return setTimeout(callback, ms);
+  };
+
 }).call(this);

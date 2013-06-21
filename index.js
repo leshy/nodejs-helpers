@@ -68,11 +68,12 @@ exports.normalize = function(list) {
     return _.map(list,function(n) { return n / total })
 }
 
-
-exports.randrange = function (x) {
-    return Math.floor(Math.random() * x + 1)
-}
-
+exports.RandomFloat = exports.randrange = function RandomFloat(x) { return Math.random() * x }
+exports.RandomInt = function RandomInt(x) { return Math.round(RandomFloat(x)) }
+exports.RandomBool = function RandomBool() { return Boolean(RandomInt(1)) }
+exports.RandomSign = function RandomSign() { return  (RandomBool()) ? 1 : -1 }
+exports.RandomWalk = function RandomWalk(x,step) { return x + (RandomSign() * RandomInt(step))  }
+exports.RandomWalkFloat = function RandomWalkFloat(x,step) { return x + (RandomSign() * RandomFloat(step))  }
 
 // select a random object from an array (stuff) 
 // but it uses getweight function to figure out the probability weights for its selection

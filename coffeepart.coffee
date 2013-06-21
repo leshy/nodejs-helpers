@@ -83,3 +83,5 @@ exports.dictpop = (dict,key,value) ->
     if arr.length is 0 then delete dict[key]
     ret
 
+# just reversing setTimeout arguments.. this is more practical for coffeescript
+exports.wait = exports.sleep = exports.delay = (ms,callback) -> setTimeout callback, ms
