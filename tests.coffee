@@ -1,5 +1,6 @@
 helpers = require './index.js'
 async = require 'async'
+_ = require 'underscore'
 
 exports.returnorcallback = (test) -> 
     f1 = (n) -> n + 3
@@ -64,3 +65,16 @@ exports.dictpush = (test) ->
     test.deepEqual {}, dict
     
     test.done()
+
+
+exports.round = (test) ->
+    test.equals helpers.round(1.12494326), 1.125
+    test.done()
+    
+
+exports.normalize = (test) ->
+    a = [1,2,3]
+    test.deepEqual helpers.normalize(a), [ 0.16666666666666666, 0.3333333333333333, 0.5 ]
+    test.done()
+
+    

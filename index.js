@@ -63,11 +63,6 @@ exports.uuid = exports.generateid = exports.rndid = function (len,chars) {
 }
 
 
-exports.normalize = function(list) {
-    var total = _.reduce(list,function(total,n) { return total + n } ,0)
-    return _.map(list,function(n) { return n / total })
-}
-
 exports.RandomFloat = exports.randrange = function RandomFloat(x) { return Math.random() * x }
 exports.RandomInt = function RandomInt(x) { return Math.round(RandomFloat(x)) }
 exports.RandomBool = function RandomBool() { return Boolean(RandomInt(1)) }

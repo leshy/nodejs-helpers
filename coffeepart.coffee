@@ -20,6 +20,10 @@ exports.forceCallbackWrap = forceCallbackWrap = (f,args...) ->
 
 
 # like async.parallel but functions to be executed are pushed dinamically (look at tests)
+# 
+# this should block when dispatching cb()
+# it should support running particular number of parallel processes,
+# OR it should support queueing
 exports.parallelBucket = parallelBucket = ->
     @n = 0; @_done = true; @subs = []; @data = {}; @error = undefined;
     @
@@ -28,8 +32,7 @@ parallelBucket::cb = (name) ->
     @n++; @_done = false
     if not name then name = @n
         
-    (err,data) =>
-        
+    (err,data) =>        
         if err
             if not @error then @error = {}
             @error[name] = err
@@ -85,3 +88,20 @@ exports.dictpop = (dict,key,value) ->
 
 # just reversing setTimeout arguments.. this is more practical for coffeescript
 exports.wait = exports.sleep = exports.delay = (ms,callback) -> setTimeout callback, ms
+
+exports.shortTime = ( time = new Date()) ->
+    appendzero = (n) ->
+        n = String(n)
+        if n.length is 1 then n = "0" + n
+        n
+        
+    if time.constructor isnt Date then time = new Date(time)
+    appendzero(time.getHours()) + ":" + appendzero(time.getMinutes()) + ":" + appendzero(time.getSeconds())
+
+exports.normalize = (list) ->
+    total = _.reduce list, (total=0,n) -> total + n
+    _.map list, (n) -> n / total
+
+exports.round = (float, n=3) ->
+    n = Math.pow(10, n)
+    Math.round(float * n) / n

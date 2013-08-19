@@ -171,4 +171,43 @@
     return setTimeout(callback, ms);
   };
 
+  exports.shortTime = function(time) {
+    var appendzero;
+    if (time == null) {
+      time = new Date();
+    }
+    appendzero = function(n) {
+      n = String(n);
+      if (n.length === 1) {
+        n = "0" + n;
+      }
+      return n;
+    };
+    if (time.constructor !== Date) {
+      time = new Date(time);
+    }
+    return appendzero(time.getHours()) + ":" + appendzero(time.getMinutes()) + ":" + appendzero(time.getSeconds());
+  };
+
+  exports.normalize = function(list) {
+    var total;
+    total = _.reduce(list, function(total, n) {
+      if (total == null) {
+        total = 0;
+      }
+      return total + n;
+    });
+    return _.map(list, function(n) {
+      return n / total;
+    });
+  };
+
+  exports.round = function(float, n) {
+    if (n == null) {
+      n = 3;
+    }
+    n = Math.pow(10, n);
+    return Math.round(float * n) / n;
+  };
+
 }).call(this);
