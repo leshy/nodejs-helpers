@@ -167,6 +167,15 @@
     return ret;
   };
 
+  exports.dictmap = function(dict, callback) {
+    var res;
+    res = {};
+    _.map(dict, function(value, key) {
+      return res[key] = callback(value, key);
+    });
+    return res;
+  };
+
   exports.wait = exports.sleep = exports.delay = function(ms, callback) {
     return setTimeout(callback, ms);
   };
@@ -189,7 +198,7 @@
     return appendzero(time.getHours()) + ":" + appendzero(time.getMinutes()) + ":" + appendzero(time.getSeconds());
   };
 
-  exports.normalize = function(list) {
+  exports.normalizeList = function(list) {
     var total;
     total = _.reduce(list, function(total, n) {
       if (total == null) {
@@ -200,6 +209,29 @@
     return _.map(list, function(n) {
       return n / total;
     });
+  };
+
+  exports.normalizeDict = function(dict) {
+    var total;
+    total = _.reduce(dict, function(total, n) {
+      if (total == null) {
+        total = 0;
+      }
+      return total + n;
+    });
+    return exports.dictmap(dict, function(n) {
+      return n / total;
+    });
+  };
+
+  exports.normalize = function(data) {
+    if (data.constructor === Array) {
+      return exports.normalizeList(data);
+    }
+    if (data.constructor === Object) {
+      return exports.normalizeDict(data);
+    }
+    throw "unknown data type, can't normalize";
   };
 
   exports.round = function(float, n) {

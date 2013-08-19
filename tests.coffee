@@ -69,12 +69,17 @@ exports.dictpush = (test) ->
 
 exports.round = (test) ->
     test.equals helpers.round(1.12494326), 1.125
-    test.done()
-    
+    test.done()    
 
-exports.normalize = (test) ->
+exports.normalizeList = (test) ->
     a = [1,2,3]
     test.deepEqual helpers.normalize(a), [ 0.16666666666666666, 0.3333333333333333, 0.5 ]
     test.done()
 
-    
+exports.dictmap = (test) ->
+    test.deepEqual helpers.dictmap({ bla: 1, x: 2, k: 3 }, (n) -> ++n), { bla: 2, x: 3, k: 4 }
+    test.done()
+
+exports.normalizeDict = (test) ->
+    test.deepEqual helpers.normalize({ bla: 1, x: 2, k: 3 }), { bla: 0.16666666666666666, x: 0.3333333333333333, k: 0.5 }
+    test.done()

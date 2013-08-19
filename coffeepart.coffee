@@ -86,6 +86,11 @@ exports.dictpop = (dict,key,value) ->
     if arr.length is 0 then delete dict[key]
     ret
 
+exports.dictmap = (dict,callback) ->
+    res = {}
+    _.map dict, (value,key) -> res[key] = callback(value,key)
+    res
+
 # just reversing setTimeout arguments.. this is more practical for coffeescript
 exports.wait = exports.sleep = exports.delay = (ms,callback) -> setTimeout callback, ms
 
@@ -98,10 +103,19 @@ exports.shortTime = ( time = new Date()) ->
     if time.constructor isnt Date then time = new Date(time)
     appendzero(time.getHours()) + ":" + appendzero(time.getMinutes()) + ":" + appendzero(time.getSeconds())
 
-exports.normalize = (list) ->
+exports.normalizeList = (list) ->
     total = _.reduce list, (total=0,n) -> total + n
     _.map list, (n) -> n / total
 
+exports.normalizeDict = (dict) ->
+    total = _.reduce dict, (total=0,n) -> total + n
+    exports.dictmap dict, (n) -> n / total
+
+exports.normalize = (data) ->
+    if data.constructor is Array then return exports.normalizeList data
+    if data.constructor is Object then return exports.normalizeDict data
+    throw "unknown data type, can't normalize"
+            
 exports.round = (float, n=3) ->
     n = Math.pow(10, n)
     Math.round(float * n) / n

@@ -111,10 +111,38 @@
     return test.done();
   };
 
-  exports.normalize = function(test) {
+  exports.normalizeList = function(test) {
     var a;
     a = [1, 2, 3];
     test.deepEqual(helpers.normalize(a), [0.16666666666666666, 0.3333333333333333, 0.5]);
+    return test.done();
+  };
+
+  exports.dictmap = function(test) {
+    test.deepEqual(helpers.dictmap({
+      bla: 1,
+      x: 2,
+      k: 3
+    }, function(n) {
+      return ++n;
+    }), {
+      bla: 2,
+      x: 3,
+      k: 4
+    });
+    return test.done();
+  };
+
+  exports.normalizeDict = function(test) {
+    test.deepEqual(helpers.normalize({
+      bla: 1,
+      x: 2,
+      k: 3
+    }), {
+      bla: 0.16666666666666666,
+      x: 0.3333333333333333,
+      k: 0.5
+    });
     return test.done();
   };
 
