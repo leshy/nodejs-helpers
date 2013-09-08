@@ -171,7 +171,12 @@
     var res;
     res = {};
     _.map(dict, function(value, key) {
-      return res[key] = callback(value, key);
+      var newvalue;
+      newvalue = callback(value, key);
+      if (newvalue === void 0) {
+        return;
+      }
+      return res[key] = newvalue;
     });
     return res;
   };
@@ -224,6 +229,20 @@
     });
   };
 
+  exports.scaleDict = function(dict, max) {
+    var scale;
+    if (max == null) {
+      max = 1;
+    }
+    max = _.max(dict, function(value) {
+      return value;
+    });
+    scale = 1 / max;
+    return exports.dictmap(dict, function(n) {
+      return n * scale;
+    });
+  };
+
   exports.normalize = function(data) {
     if (data.constructor === Array) {
       return exports.normalizeList(data);
@@ -240,6 +259,35 @@
     }
     n = Math.pow(10, n);
     return Math.round(float * n) / n;
+  };
+
+  exports.countExtend = function(dict1, dict2) {
+    _.map(dict2, function(value, key) {
+      if (dict1[key] === void 0) {
+        return dict1[key] = 1;
+      } else {
+        return ++dict1[key];
+      }
+    });
+    return dict1;
+  };
+
+  exports.mapToDict = function(iterable, callback) {
+    var res;
+    res = {};
+    _.map(iterable, function(element) {
+      return res[callback(element)] = true;
+    });
+    return res;
+  };
+
+  exports.arrayToDict = function(iterable) {
+    var res;
+    res = {};
+    _.map(iterable, function(element) {
+      return res[element] = true;
+    });
+    return res;
   };
 
 }).call(this);

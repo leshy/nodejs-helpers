@@ -88,7 +88,10 @@ exports.dictpop = (dict,key,value) ->
 
 exports.dictmap = (dict,callback) ->
     res = {}
-    _.map dict, (value,key) -> res[key] = callback(value,key)
+    _.map dict, (value,key) ->
+        newvalue = callback(value,key)
+        if newvalue is undefined then return
+        res[key] = newvalue
     res
 
 # just reversing setTimeout arguments.. this is more practical for coffeescript
@@ -111,6 +114,11 @@ exports.normalizeDict = (dict) ->
     total = _.reduce dict, (total=0,n) -> total + n
     exports.dictmap dict, (n) -> n / total
 
+exports.scaleDict = (dict,max=1) ->
+    max = _.max dict, (value) -> value
+    scale = 1 / max
+    exports.dictmap dict, (n) -> n * scale
+
 exports.normalize = (data) ->
     if data.constructor is Array then return exports.normalizeList data
     if data.constructor is Object then return exports.normalizeDict data
@@ -119,3 +127,19 @@ exports.normalize = (data) ->
 exports.round = (float, n=3) ->
     n = Math.pow(10, n)
     Math.round(float * n) / n
+
+exports.countExtend = (dict1, dict2) ->
+    _.map dict2, (value,key) -> if dict1[key] is undefined then dict1[key] = 1 else ++dict1[key]
+    dict1
+
+exports.mapToDict = (iterable,callback) ->
+    res = {}
+    _.map iterable, (element) -> res[callback(element)] = true
+    res
+    
+# convert an array to dict of a form { entry: true, entry2: true }
+exports.arrayToDict = (iterable) ->
+    res = {}
+    _.map iterable, (element) -> res[element] = true
+    res
+

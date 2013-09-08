@@ -213,13 +213,6 @@ exports.isEmpty = function (ob){
     return true;
 }
 
-// convert an array to dict of a form { entry: true, entry2: true }
-// used in order to utilize quick searching through the dict data structure vs the array one
-exports.arraytodict = function (array) {
-    var ret = {}
-    _.map(array, function (x) { ret[x] = true })
-    return ret
-}
 
 // read an attribute from an object or from a class
 exports.objorclass = objorclass = function (obj,name) {
