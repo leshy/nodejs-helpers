@@ -143,3 +143,15 @@ exports.arrayToDict = (iterable) ->
     _.map iterable, (element) -> res[element] = true
     res
 
+exports.trim = exports.strip = (str, chars) -> exports.ltrim(exports.rtrim(str, chars), chars)
+
+exports.ltrim = (str, chars="\\s") -> 
+    str.replace(new RegExp("^[" + chars + "]+", "g"), "")
+ 
+exports.rtrim = (str, chars="\\s") -> 
+    str.replace(new RegExp("[" + chars + "]+$", "g"), "")
+
+exports.makePath = (seperator="\/",elements...) ->
+    _.map(_.flatten(elements), (element) -> exports.trim element, seperator).join(seperator)
+
+

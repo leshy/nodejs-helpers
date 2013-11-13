@@ -128,20 +128,6 @@ exports.copy = function (obj) {
     throw "dunno"
 }
 
-exports.trim = exports.strip = function (str, chars) {
-	return exports.ltrim(exports.rtrim(str, chars), chars);
-}
- 
-exports.ltrim = function (str, chars) {
-	chars = chars || "\\s";
-	return str.replace(new RegExp("^[" + chars + "]+", "g"), "");
-}
- 
-exports.rtrim = function (str, chars) {
-	chars = chars || "\\s";
-	return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
-}
-
 exports.capitalize = function (str) { return str.charAt(0).toUpperCase() + str.slice(1); }
 
 // this thing should accept an non iterable object and callback only once.. 

@@ -290,4 +290,33 @@
     return res;
   };
 
+  exports.trim = exports.strip = function(str, chars) {
+    return exports.ltrim(exports.rtrim(str, chars), chars);
+  };
+
+  exports.ltrim = function(str, chars) {
+    if (chars == null) {
+      chars = "\\s";
+    }
+    return str.replace(new RegExp("^[" + chars + "]+", "g"), "");
+  };
+
+  exports.rtrim = function(str, chars) {
+    if (chars == null) {
+      chars = "\\s";
+    }
+    return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
+  };
+
+  exports.makePath = function() {
+    var elements, seperator;
+    seperator = arguments[0], elements = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    if (seperator == null) {
+      seperator = "\/";
+    }
+    return _.map(_.flatten(elements), function(element) {
+      return exports.trim(element, seperator);
+    }).join(seperator);
+  };
+
 }).call(this);
