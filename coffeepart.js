@@ -309,14 +309,11 @@
   };
 
   exports.makePath = function() {
-    var elements, seperator;
-    seperator = arguments[0], elements = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    if (seperator == null) {
-      seperator = "\/";
-    }
-    return _.map(_.flatten(elements), function(element) {
-      return exports.trim(element, seperator);
-    }).join(seperator);
+    var elements;
+    elements = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return "/" + _.map(_.flatten(elements), function(element) {
+      return exports.trim(element, '\/');
+    }).join('/');
   };
 
 }).call(this);

@@ -151,7 +151,7 @@ exports.ltrim = (str, chars="\\s") ->
 exports.rtrim = (str, chars="\\s") -> 
     str.replace(new RegExp("[" + chars + "]+$", "g"), "")
 
-exports.makePath = (seperator="\/",elements...) ->
-    _.map(_.flatten(elements), (element) -> exports.trim element, seperator).join(seperator)
+exports.makePath = (elements...) ->
+    "/" + _.map(_.flatten(elements), (element) -> exports.trim element, '\/').join('/')
 
 
