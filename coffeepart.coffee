@@ -154,4 +154,8 @@ exports.rtrim = (str, chars="\\s") ->
 exports.makePath = (elements...) ->
     "/" + _.map(_.flatten(elements), (element) -> exports.trim element, '\/').join('/')
 
+exports.identity = (x) -> x
 
+exports.joinF = (functs...) -> _.map functs, (f) -> f()
+
+exports.filename = (path) -> path.replace /^.*[\\\/]/, ''

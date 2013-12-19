@@ -316,4 +316,20 @@
     }).join('/');
   };
 
+  exports.identity = function(x) {
+    return x;
+  };
+
+  exports.joinF = function() {
+    var functs;
+    functs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return _.map(functs, function(f) {
+      return f();
+    });
+  };
+
+  exports.filename = function(path) {
+    return path.replace(/^.*[\\\/]/, '');
+  };
+
 }).call(this);
