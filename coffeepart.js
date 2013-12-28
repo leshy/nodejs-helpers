@@ -281,11 +281,15 @@
     return res;
   };
 
-  exports.arrayToDict = function(iterable) {
+  exports.arrayToDict = function(iterable, callback) {
     var res;
     res = {};
     _.map(iterable, function(element) {
-      return res[element] = true;
+      if (callback) {
+        return res[element] = callback(element);
+      } else {
+        return res[element] = true;
+      }
     });
     return res;
   };

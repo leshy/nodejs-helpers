@@ -136,11 +136,12 @@ exports.mapToDict = (iterable,callback) ->
     res = {}
     _.map iterable, (element) -> res[callback(element)] = true
     res
-    
+
 # convert an array to dict of a form { entry: true, entry2: true }
-exports.arrayToDict = (iterable) ->
+exports.arrayToDict = (iterable,callback) ->
     res = {}
-    _.map iterable, (element) -> res[element] = true
+    _.map iterable, (element) ->
+        if callback then res[element] = callback(element) else res[element] = true
     res
 
 exports.trim = exports.strip = (str, chars) -> exports.ltrim(exports.rtrim(str, chars), chars)
