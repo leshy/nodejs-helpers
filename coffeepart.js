@@ -272,23 +272,20 @@
     return dict1;
   };
 
-  exports.mapToDict = function(iterable, callback) {
+  exports.arrayToDict = function(iterable, callbackVal, callbackKey) {
     var res;
     res = {};
     _.map(iterable, function(element) {
-      return res[callback(element)] = true;
-    });
-    return res;
-  };
-
-  exports.arrayToDict = function(iterable, callback) {
-    var res;
-    res = {};
-    _.map(iterable, function(element) {
-      if (callback) {
-        return res[element] = callback(element);
+      var key;
+      if (callbackKey) {
+        key = callbackKey(element);
       } else {
-        return res[element] = true;
+        key = element;
+      }
+      if (callbackVal) {
+        return res[key] = callbackVal(element);
+      } else {
+        return res[key] = true;
       }
     });
     return res;

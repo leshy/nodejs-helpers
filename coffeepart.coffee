@@ -132,16 +132,12 @@ exports.countExtend = (dict1, dict2) ->
     _.map dict2, (value,key) -> if dict1[key] is undefined then dict1[key] = 1 else ++dict1[key]
     dict1
 
-exports.mapToDict = (iterable,callback) ->
-    res = {}
-    _.map iterable, (element) -> res[callback(element)] = true
-    res
-
 # convert an array to dict of a form { entry: true, entry2: true }
-exports.arrayToDict = (iterable,callback) ->
+exports.arrayToDict = (iterable,callbackVal,callbackKey) ->
     res = {}
     _.map iterable, (element) ->
-        if callback then res[element] = callback(element) else res[element] = true
+        if callbackKey then key = callbackKey(element) else key = element
+        if callbackVal then res[key] = callbackVal(element) else res[key] = true
     res
 
 exports.trim = exports.strip = (str, chars) -> exports.ltrim(exports.rtrim(str, chars), chars)
