@@ -128,7 +128,7 @@ exports.copy = function (obj) {
     throw "dunno"
 }
 
-exports.capitalize = function (str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+exports.capitalize = function (str) { if (str) { return str.charAt(0).toUpperCase() + str.slice(1) } }
 
 // this thing should accept an non iterable object and callback only once.. 
 // try to iterate through an object, call a callback with the object itself if you fail
@@ -188,11 +188,11 @@ exports.find = function (collection,callback) {
     }
 }
 
-exports.Minute = 1000 * 60
-exports.Hour = exports.Minute * 60
-exports.Day = exports.Hour * 24
-exports.Month = exports.Day * 30
-exports.Now = function () { return new Date().getTime() }
+exports.Minute = exports.minute = 1000 * 60
+exports.Hour = exports.hour = exports.Minute * 60
+exports.Day = exports.day = exports.Hour * 24
+exports.Month = exports.month = exports.Day * 30
+exports.Now = exports.now = function () { return new Date().getTime() }
 
 exports.isEmpty = function (ob){
     for(var i in ob){ return false;}
