@@ -182,7 +182,11 @@
   };
 
   exports.wait = exports.sleep = exports.delay = function(ms, callback) {
-    return setTimeout(callback, ms);
+    var id;
+    id = setTimeout(callback, ms);
+    return function() {
+      return clearTimeout(id);
+    };
   };
 
   exports.shortTime = function(time) {

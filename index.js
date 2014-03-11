@@ -199,7 +199,6 @@ exports.isEmpty = function (ob){
     return true;
 }
 
-
 // read an attribute from an object or from a class
 exports.objorclass = objorclass = function (obj,name) {
     if (obj.constructor == Function) {
