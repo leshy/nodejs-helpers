@@ -41,6 +41,7 @@
     this.subs = {};
     this.doneSubs = [];
     this.data = {};
+    this.callbacks = {};
     this.error = void 0;
     return this;
   };
@@ -52,6 +53,7 @@
     if (!name) {
       name = this.n;
     }
+    this.callbacks[name] = true;
     return function(err, data) {
       if (err) {
         if (!_this.error) {

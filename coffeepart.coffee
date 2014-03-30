@@ -25,13 +25,15 @@ exports.forceCallbackWrap = forceCallbackWrap = (f,args...) ->
 # it should support running particular number of parallel processes,
 # OR it should support queueing
 exports.parallelBucket = parallelBucket = ->
-    @n = 0; @_done = true; @subs = {}; @doneSubs = []; @data = {}; @error = undefined;
+    @n = 0; @_done = true; @subs = {}; @doneSubs = []; @data = {}; @callbacks = {}; @error = undefined;
     @
 
 parallelBucket::cb = (name) ->
     @n++; @_done = false
     if not name then name = @n
-        
+
+    @callbacks[name] = true
+    
     (err,data) =>        
         if err
             if not @error then @error = {}
@@ -111,7 +113,7 @@ exports.setTimeout = exports.wait = exports.sleep = exports.delay = (ms,callback
     done = false
     wrappedCallback = -> done = true; callback()
     id = setTimeout wrappedCallback, ms
-    -> if not done then clearTimeout id; return not done
+    (-> if not done then clearTimeout id; return not done)
 
 exports.shortTime = ( time = new Date()) ->
     appendzero = (n) ->
