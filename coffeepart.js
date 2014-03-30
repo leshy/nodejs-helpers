@@ -38,7 +38,8 @@
   exports.parallelBucket = parallelBucket = function() {
     this.n = 0;
     this._done = true;
-    this.subs = [];
+    this.subs = {};
+    this.doneSubs = [];
     this.data = {};
     this.error = void 0;
     return this;
@@ -59,18 +60,25 @@
         _this.error[name] = err;
       }
       _this.data[name] = data;
-      --_this.n || (_this._done = true && _.map(_this.subs, function(sub) {
+      exports.dictArrayMap(_this.subs, name, function(err, sub) {
+        return sub(err, data);
+      });
+      --_this.n || (_this._done = true && _.map(_this.doneSubs, function(sub) {
         return sub(_this.error, _this.data);
       }));
       return void 0;
     };
   };
 
+  parallelBucket.prototype.on = function(name, callback) {
+    return exports.dictpush(this.subs, name, callback);
+  };
+
   parallelBucket.prototype.done = function(callback) {
     if (this._done) {
       return callback(this.error, this.data);
     } else {
-      return this.subs.push(callback);
+      return this.doneSubs.push(callback);
     }
   };
 
@@ -165,6 +173,19 @@
       delete dict[key];
     }
     return ret;
+  };
+
+  exports.dictArrayMap = function(dict, key, callback) {
+    if (!dict[key]) {
+      return;
+    }
+    if (dict[key].constructor !== Array) {
+      return callback(null, dict[key]);
+    } else {
+      return _.map(dict[key], function(val) {
+        return callback(null, val);
+      });
+    }
   };
 
   exports.dictmap = function(dict, callback) {

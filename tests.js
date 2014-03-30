@@ -33,7 +33,7 @@
   };
 
   exports.parallelBucket = function(test) {
-    var bucket, makewaiter;
+    var bucket, makewaiter, specificsub;
     makewaiter = function(n) {
       return function(callback) {
         return setTimeout((function() {
@@ -47,10 +47,15 @@
     makewaiter(70)(bucket.cb('bla'));
     makewaiter(80)(bucket.cb());
     makewaiter(90)(bucket.cb());
+    specificsub = 0;
+    bucket.on('bla', function(err, data) {
+      return specificsub += 1;
+    });
     test.equals(bucket.n, 5);
     return bucket.done(function(err, data) {
       console.log(err, data);
       test.equals(bucket.n, 0);
+      test.equals(specificsub, 1);
       return test.done();
     });
   };

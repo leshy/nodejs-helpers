@@ -26,9 +26,17 @@ exports.parallelBucket = (test) ->
     makewaiter(80)(bucket.cb())
     makewaiter(90)(bucket.cb())
 
+    specificsub = 0
+    
+    bucket.on 'bla', (err,data) -> specificsub += 1
+
     test.equals bucket.n, 5
 
-    bucket.done (err,data) -> console.log(err, data); test.equals bucket.n, 0; test.done()
+    bucket.done (err,data) ->
+        console.log(err, data);
+        test.equals bucket.n, 0;
+        test.equals specificsub, 1
+        test.done()
 
 
 exports.remove = (test) ->

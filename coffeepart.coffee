@@ -25,7 +25,7 @@ exports.forceCallbackWrap = forceCallbackWrap = (f,args...) ->
 # it should support running particular number of parallel processes,
 # OR it should support queueing
 exports.parallelBucket = parallelBucket = ->
-    @n = 0; @_done = true; @subs = []; @data = {}; @error = undefined;
+    @n = 0; @_done = true; @subs = {}; @doneSubs = []; @data = {}; @error = undefined;
     @
 
 parallelBucket::cb = (name) ->
@@ -37,12 +37,17 @@ parallelBucket::cb = (name) ->
             if not @error then @error = {}
             @error[name] = err
         @data[name] = data
+
+        exports.dictArrayMap @subs, name, (err,sub) => sub(err,data)
         
-        --@n or @_done = true and _.map @subs, (sub) => sub(@error,@data)
+        --@n or @_done = true and _.map @doneSubs, (sub) => sub(@error,@data)
 
         return undefined
 
-parallelBucket::done = (callback) -> if @_done then callback(@error,@data) else @subs.push callback
+parallelBucket::on = (name,callback) ->
+    exports.dictpush @subs, name, callback
+
+parallelBucket::done = (callback) -> if @_done then callback(@error,@data) else @doneSubs.push callback
 
 # depthfirst search and modify through JSON
 depthFirst = (target, clone, callback) ->
@@ -85,6 +90,11 @@ exports.dictpop = (dict,key,value) ->
     if value then exports.remove arr, ret = value else ret = arr.pop()
     if arr.length is 0 then delete dict[key]
     ret
+
+exports.dictArrayMap = (dict,key,callback) ->
+    if not dict[key] then return
+    if dict[key].constructor isnt Array then callback null, dict[key]
+    else _.map dict[key], (val) -> callback null, val
 
 exports.dictmap = (dict,callback) ->
     res = {}
