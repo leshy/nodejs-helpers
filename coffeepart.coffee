@@ -95,9 +95,12 @@ exports.dictmap = (dict,callback) ->
     res
 
 # just reversing setTimeout arguments.. this is more practical for coffeescript
-exports.wait = exports.sleep = exports.delay = (ms,callback) ->
-    id = setTimeout callback, ms
-    -> clearTimeout id
+# returns function that canceles setTimeout. that function returns true of false to indicate if cacelation request was executed too late
+exports.setTimeout = exports.wait = exports.sleep = exports.delay = (ms,callback) ->
+    cleared = true
+    wrappedCallback = -> cleared = false; callback()
+    id = setTimeout wrappedCallback, ms
+    -> clearTimeout id; cleared
 
 exports.shortTime = ( time = new Date()) ->
     appendzero = (n) ->
@@ -159,3 +162,8 @@ exports.joinF = (functs...) -> _.map functs, (f) -> f()
 
 exports.filename = (path) -> path.replace /^.*[\\\/]/, ''
 
+exports.pad = (text,length,char="0") ->
+    if text.constructor isnt String then text = String text
+    if text.length >= length then return text
+    _.times length - text.length, -> text = char + text
+    text

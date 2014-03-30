@@ -83,3 +83,8 @@ exports.dictmap = (test) ->
 exports.normalizeDict = (test) ->
     test.deepEqual helpers.normalize({ bla: 1, x: 2, k: 3 }), { bla: 0.16666666666666666, x: 0.3333333333333333, k: 0.5 }
     test.done()
+
+exports.pad = (test) ->
+    test.equals helpers.pad("bla",5,"X"), "XXbla"
+    test.done()
+    

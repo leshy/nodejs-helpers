@@ -146,4 +146,9 @@
     return test.done();
   };
 
+  exports.pad = function(test) {
+    test.equals(helpers.pad("bla", 5, "X"), "XXbla");
+    return test.done();
+  };
+
 }).call(this);

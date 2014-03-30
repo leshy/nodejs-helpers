@@ -181,11 +181,17 @@
     return res;
   };
 
-  exports.wait = exports.sleep = exports.delay = function(ms, callback) {
-    var id;
-    id = setTimeout(callback, ms);
+  exports.setTimeout = exports.wait = exports.sleep = exports.delay = function(ms, callback) {
+    var cleared, id, wrappedCallback;
+    cleared = true;
+    wrappedCallback = function() {
+      cleared = false;
+      return callback();
+    };
+    id = setTimeout(wrappedCallback, ms);
     return function() {
-      return clearTimeout(id);
+      clearTimeout(id);
+      return cleared;
     };
   };
 
@@ -335,6 +341,22 @@
 
   exports.filename = function(path) {
     return path.replace(/^.*[\\\/]/, '');
+  };
+
+  exports.pad = function(text, length, char) {
+    if (char == null) {
+      char = "0";
+    }
+    if (text.constructor !== String) {
+      text = String(text);
+    }
+    if (text.length >= length) {
+      return text;
+    }
+    _.times(length - text.length, function() {
+      return text = char + text;
+    });
+    return text;
   };
 
 }).call(this);
