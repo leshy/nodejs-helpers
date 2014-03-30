@@ -53,8 +53,9 @@
     if (!name) {
       name = this.n;
     }
-    this.callbacks[name] = true;
+    this.callbacks[name] = 1;
     return function(err, data) {
+      _this.callbacks[name] += 1;
       if (err) {
         if (!_this.error) {
           _this.error = {};
@@ -74,7 +75,7 @@
 
   parallelBucket.prototype.on = function(name, callback) {
     exports.dictpush(this.subs, name, callback);
-    if (this.data[name]) {
+    if (this.callbacks[name] > 1) {
       return callback(null, this.data[name]);
     }
   };

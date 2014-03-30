@@ -32,12 +32,14 @@ parallelBucket::cb = (name) ->
     @n++; @_done = false
     if not name then name = @n
 
-    @callbacks[name] = true
+    @callbacks[name] = 1
     
-    (err,data) =>        
+    (err,data) =>
+        @callbacks[name] += 1
         if err
             if not @error then @error = {}
             @error[name] = err
+            
         @data[name] = data
 
         exports.dictArrayMap @subs, name, (err,sub) => sub(err,data)
@@ -48,10 +50,9 @@ parallelBucket::cb = (name) ->
 
 parallelBucket::on = (name,callback) ->
     exports.dictpush @subs, name, callback
-    if @data[name] then callback null, @data[name]
+    if @callbacks[name] > 1 then callback null, @data[name]
 
 parallelBucket::done = (callback) -> if @_done then callback(@error,@data) else @doneSubs.push callback
-
 # depthfirst search and modify through JSON
 depthFirst = (target, clone, callback) ->
     if target.constructor is Object or target.constructor is Array
