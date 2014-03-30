@@ -56,7 +56,9 @@
       console.log(err, data);
       test.equals(bucket.n, 0);
       test.equals(specificsub, 1);
-      return test.done();
+      return bucket.on('bla', function(err, data) {
+        return test.done();
+      });
     });
   };
 

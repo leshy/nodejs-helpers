@@ -36,7 +36,7 @@ exports.parallelBucket = (test) ->
         console.log(err, data);
         test.equals bucket.n, 0;
         test.equals specificsub, 1
-        test.done()
+        bucket.on 'bla', (err,data) -> test.done()
 
 
 exports.remove = (test) ->

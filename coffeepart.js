@@ -71,7 +71,10 @@
   };
 
   parallelBucket.prototype.on = function(name, callback) {
-    return exports.dictpush(this.subs, name, callback);
+    exports.dictpush(this.subs, name, callback);
+    if (data[name]) {
+      return callback(null, data[name]);
+    }
   };
 
   parallelBucket.prototype.done = function(callback) {
