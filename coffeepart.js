@@ -182,16 +182,18 @@
   };
 
   exports.setTimeout = exports.wait = exports.sleep = exports.delay = function(ms, callback) {
-    var cleared, id, wrappedCallback;
-    cleared = true;
+    var done, id, wrappedCallback;
+    done = false;
     wrappedCallback = function() {
-      cleared = false;
+      done = true;
       return callback();
     };
     id = setTimeout(wrappedCallback, ms);
     return function() {
-      clearTimeout(id);
-      return cleared;
+      if (!done) {
+        clearTimeout(id);
+        return !done;
+      }
     };
   };
 

@@ -97,10 +97,10 @@ exports.dictmap = (dict,callback) ->
 # just reversing setTimeout arguments.. this is more practical for coffeescript
 # returns function that canceles setTimeout. that function returns true of false to indicate if cacelation request was executed too late
 exports.setTimeout = exports.wait = exports.sleep = exports.delay = (ms,callback) ->
-    cleared = true
-    wrappedCallback = -> cleared = false; callback()
+    done = false
+    wrappedCallback = -> done = true; callback()
     id = setTimeout wrappedCallback, ms
-    -> clearTimeout id; cleared
+    -> if not done then clearTimeout id; return not done
 
 exports.shortTime = ( time = new Date()) ->
     appendzero = (n) ->
