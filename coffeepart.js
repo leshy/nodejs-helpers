@@ -72,8 +72,8 @@
 
   parallelBucket.prototype.on = function(name, callback) {
     exports.dictpush(this.subs, name, callback);
-    if (data[name]) {
-      return callback(null, data[name]);
+    if (this.data[name]) {
+      return callback(null, this.data[name]);
     }
   };
 

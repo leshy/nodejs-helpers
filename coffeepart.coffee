@@ -46,7 +46,7 @@ parallelBucket::cb = (name) ->
 
 parallelBucket::on = (name,callback) ->
     exports.dictpush @subs, name, callback
-    if data[name] then callback null, data[name]
+    if @data[name] then callback null, @data[name]
 
 parallelBucket::done = (callback) -> if @_done then callback(@error,@data) else @doneSubs.push callback
 
