@@ -71,9 +71,7 @@ queue::push = (name,f,callback) ->
     @queue.push [name, f, callback]
     @start()
         
-queue::start = (callback) ->
-    @done callback
-        
+queue::start = () ->
     popqueue = =>
         if not @queue.length and not @n then return @triggerDone()
         if not @queue.length or @n >= @size then return
@@ -93,7 +91,6 @@ queue::start = (callback) ->
     popqueue()
                 
 queue::triggerDone = ->
-    @started = false
     _.map @doneSubs, (sub) => sub(@err,@data)
     
 queue::done = (callback) -> @doneSubs.push callback

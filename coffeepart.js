@@ -117,10 +117,9 @@
     return this.start();
   };
 
-  queue.prototype.start = function(callback) {
+  queue.prototype.start = function() {
     var popqueue,
       _this = this;
-    this.done(callback);
     popqueue = function() {
       var f, name, _ref;
       if (!_this.queue.length && !_this.n) {
@@ -144,7 +143,6 @@
 
   queue.prototype.triggerDone = function() {
     var _this = this;
-    this.started = false;
     return _.map(this.doneSubs, function(sub) {
       return sub(_this.err, _this.data);
     });

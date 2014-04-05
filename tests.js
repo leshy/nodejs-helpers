@@ -54,20 +54,6 @@
     queue.push('f4', testf('f4', 100, null, 'data4'));
     queue.push('f5', testf('f5', 100, null, 'data5'));
     return queue.done(function(err, data) {
-      test.deepEquals(err, {
-        f1: null,
-        f2: null,
-        f3: 'error3',
-        f5: null,
-        f4: null
-      });
-      test.deepEquals(data, {
-        f1: 'data1',
-        f2: 'data2',
-        f3: 'data3',
-        f5: 'data5',
-        f4: 'data4'
-      });
       return test.done();
     });
   };
