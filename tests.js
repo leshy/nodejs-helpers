@@ -54,7 +54,6 @@
     queue.push('f4', testf('f4', 100, null, 'data4'));
     queue.push('f5', testf('f5', 100, null, 'data5'));
     return queue.done(function(err, data) {
-      console.log("QUEUE DONE", err, data);
       return test.done();
     });
   };

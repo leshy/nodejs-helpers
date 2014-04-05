@@ -31,7 +31,6 @@ exports.queue = (test) ->
     queue.push 'f5', testf('f5', 100, null, 'data5')
     
     queue.done (err,data) ->
-        console.log "QUEUE DONE",err,data
         test.done()
             
                 
