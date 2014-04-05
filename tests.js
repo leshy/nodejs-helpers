@@ -32,6 +32,46 @@
     });
   };
 
+  exports.queue = function(test) {
+    var queue, testf, triggered;
+    queue = new helpers.queue({
+      size: 3
+    });
+    triggered = {};
+    testf = function(name, time, err, data) {
+      return function(callback) {
+        console.log("f " + name + " starting");
+        return helpers.wait(time, function() {
+          console.log("f " + name + " done");
+          triggered[name] = true;
+          return callback(err, data);
+        });
+      };
+    };
+    queue.push('f1', testf('f1', 100, null, 'data1'));
+    queue.push('f2', testf('f2', 100, null, 'data2'));
+    queue.push('f3', testf('f3', 100, 'error3', 'data3'));
+    queue.push('f4', testf('f4', 100, null, 'data4'));
+    queue.push('f5', testf('f5', 100, null, 'data5'));
+    return queue.done(function(err, data) {
+      test.deepEquals(err, {
+        f1: null,
+        f2: null,
+        f3: 'error3',
+        f5: null,
+        f4: null
+      });
+      test.deepEquals(data, {
+        f1: 'data1',
+        f2: 'data2',
+        f3: 'data3',
+        f5: 'data5',
+        f4: 'data4'
+      });
+      return test.done();
+    });
+  };
+
   exports.parallelBucket = function(test) {
     var bucket, makewaiter, specificsub;
     makewaiter = function(n) {

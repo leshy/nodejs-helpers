@@ -150,30 +150,6 @@ exports.maybeiterate = function (something,callback) {
     callback(something)
 }
 
-// universal map
-exports.unimap = function (something,callback) {
-    if (something.constructor == Array) { return _.map(something,callback) }
-    if (something.constructor == Object) { return exports.hashmap(something,callback) }
-    return callback(something)
-}
-
-exports.hashfromlist = function (list) {
-    ret = {}
-    _.map(list, function (elem) { ret[elem] = true })
-    return ret
-}
-
-// this thing should accept an non iterable object and callback only once.. 
-exports.hashmap = function (hash,callback) {
-    if (hash.constructor == Array) { hash = exports.hashfromlist(hash) }
-    var ret = {}
-    for (property in hash) { 
-        res = callback(hash[property], property) 
-        if (res != undefined) { ret[property] = res }
-    }
-    return ret
-}
-
 exports.hashfilter = function (hash,callback) {
     var ret = {}
     for (property in hash) { var r = callback(hash[property], property); if (r != undefined) { ret[property] = r} }

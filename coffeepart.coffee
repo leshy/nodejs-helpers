@@ -24,8 +24,16 @@ exports.forceCallbackWrap = forceCallbackWrap = (f,args...) ->
 # this should block when dispatching cb()
 # it should support running particular number of parallel processes,
 # OR it should support queueing
-exports.parallelBucket = parallelBucket = ->
-    @n = 0; @_done = true; @subs = {}; @doneSubs = []; @data = {}; @callbacks = {}; @error = undefined;
+exports.parallelBucket = parallelBucket = (options) ->
+    @n = 0;
+    @_done = true
+    @data = {} #callback name - data
+    @error = null # callback name - error message
+
+    @subs = {} # function name - subscription
+    @doneSubs = [] # subscriptions to be called when all function are done with execution
+    @callbacks = {} # callback name - number of times called
+    
     @
 
 parallelBucket::cb = (name) ->
@@ -35,24 +43,60 @@ parallelBucket::cb = (name) ->
     @callbacks[name] = 1
     
     (err,data) =>
+        if @callbacks[name] > 1 then console.warn "parallelbucket callback '#{ name } called more then once'"
         @callbacks[name] += 1
-        if err
-            if not @error then @error = {}
-            @error[name] = err
-            
-        @data[name] = data
+        if err then @error[name] = err
+        if data then @data[name] = data
 
-        exports.dictArrayMap @subs, name, (err,sub) => sub(err,data)
-        
+        @trigger name, err, data
+
         --@n or @_done = true and _.map @doneSubs, (sub) => sub(@error,@data)
 
         return undefined
 
+parallelBucket::trigger = (name,args...) ->
+    exports.dictArrayMap @subs, name, (err,sub) => sub.apply @, args
+    
 parallelBucket::on = (name,callback) ->
     exports.dictpush @subs, name, callback
     if @callbacks[name] > 1 then callback null, @data[name]
 
 parallelBucket::done = (callback) -> if @_done then callback(@error,@data) else @doneSubs.push callback
+
+exports.queue = queue = (options) ->
+    _.extend @, { namecounter: 0, n: 0, size: 5, data: {}, err: {}, queue: [], doneSubs: [] }, options
+
+queue::push = (name,f) ->
+    if name.constructor is Function then f = name and name = @namecounter++ # name is optional
+    @queue.push [name, f]
+    @start()
+        
+queue::start = (callback) ->
+    popqueue = =>
+        if not @queue.length and not @n then return @triggerDone()
+        if not @queue.length or @n >= @size then return
+            
+        @n++
+        
+        [ name, f ] = @queue.pop()
+
+        f (err,data) =>
+            @n--
+            @err[name] = err
+            @data[name] = data
+            popqueue()
+            
+        popqueue()            
+
+    popqueue()
+                
+queue::triggerDone = ->
+    @started = false
+    _.map @doneSubs, (sub) => sub(@err,@data)
+    
+queue::done = (callback) -> @doneSubs.push callback
+    
+
 # depthfirst search and modify through JSON
 depthFirst = (target, clone, callback) ->
     if target.constructor is Object or target.constructor is Array
@@ -85,6 +129,7 @@ exports.extend = extend = (destination, targets...) ->
     destination
 
 # operations for dealing with a dictionary of arrays
+# --------------------------------------------------
 exports.dictpush = (dict,key,value) ->
     if not arr = dict[key] then arr = dict[key] = []
     arr.push value
@@ -99,14 +144,31 @@ exports.dictArrayMap = (dict,key,callback) ->
     if not dict[key] then return
     if dict[key].constructor isnt Array then callback null, dict[key]
     else _.map dict[key], (val) -> callback null, val
+# --------------------------------------------------
 
-exports.dictmap = (dict,callback) ->
+
+# previously stupidly named hashfromlist
+exports.makeDict = (array) ->
+    ret = {}
+    _.map array, (elem) -> ret[elem] = true
+    ret
+
+
+exports.dictMap = exports.dictmap = (dict,callback) ->
+    if dict.constructor is Array then dict = exports.makeDict dict
     res = {}
     _.map dict, (value,key) ->
         newvalue = callback(value,key)
         if newvalue is undefined then return
         res[key] = newvalue
     res
+
+
+exports.uniMap = exports.unimap = (something,callback) ->    
+    if something.constructor is Array then return _.map something, callback
+    if something.constructor is Object then return exports.dictMap something,callback
+    return callback(something)
+
 
 # just reversing setTimeout arguments.. this is more practical for coffeescript
 # returns function that canceles setTimeout. that function returns true of false to indicate if cacelation request was executed too late
@@ -143,9 +205,9 @@ exports.normalize = (data) ->
     if data.constructor is Object then return exports.normalizeDict data
     throw "unknown data type, can't normalize"
             
-exports.round = (float, n=3) ->
+exports.round = (x, n=3) ->
     n = Math.pow(10, n)
-    Math.round(float * n) / n
+    Math.round(x * n) / n
 
 exports.countExtend = (dict1, dict2) ->
     _.map dict2, (value,key) -> if dict1[key] is undefined then dict1[key] = 1 else ++dict1[key]
@@ -176,8 +238,8 @@ exports.joinF = (functs...) -> _.map functs, (f) -> f()
 
 exports.filename = (path) -> path.replace /^.*[\\\/]/, ''
 
-exports.pad = (text,length,char="0") ->
+exports.pad = (text,length,chr="0") ->
     if text.constructor isnt String then text = String text
     if text.length >= length then return text
-    _.times length - text.length, -> text = char + text
+    _.times length - text.length, -> text = chr + text
     text
