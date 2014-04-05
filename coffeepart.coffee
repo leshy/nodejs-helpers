@@ -45,12 +45,14 @@ parallelBucket::cb = (name) ->
     (err,data) =>
         if @callbacks[name] > 1 then console.warn "parallelbucket callback '#{ name } called more then once'"
         @callbacks[name] += 1
-        if err then @error[name] = err
+        if err
+            if not @err then @err = {}
+            @err[name] = err
         if data then @data[name] = data
 
         @trigger name, err, data
 
-        --@n or @_done = true and _.map @doneSubs, (sub) => sub(@error,@data)
+        --@n or @_done = true and _.map @doneSubs, (sub) => sub(@err,@data)
 
         return undefined
 
@@ -61,10 +63,10 @@ parallelBucket::on = (name,callback) ->
     exports.dictpush @subs, name, callback
     if @callbacks[name] > 1 then callback null, @data[name]
 
-parallelBucket::done = (callback) -> if @_done then callback(@error,@data) else @doneSubs.push callback
+parallelBucket::done = (callback) -> if @_done then callback(@err,@data) else @doneSubs.push callback
 
 exports.queue = queue = (options) ->
-    _.extend @, { namecounter: 0, n: 0, size: 5, data: {}, err: {}, queue: [], doneSubs: [] }, options
+    _.extend @, { namecounter: 0, n: 0, size: 5, data: {}, queue: [], doneSubs: [] }, options
 
 queue::push = (name,f,callback) ->
     if name.constructor is Function then f = name and name = @namecounter++ # name is optional
@@ -82,7 +84,9 @@ queue::start = () ->
 
         f (err,data) =>
             @n--
-            @err[name] = err
+            if err
+                if not @err then @err = {}
+                @err[name] = err
             @data[name] = data
             popqueue()
             

@@ -60,14 +60,17 @@
       }
       _this.callbacks[name] += 1;
       if (err) {
-        _this.error[name] = err;
+        if (!_this.err) {
+          _this.err = {};
+        }
+        _this.err[name] = err;
       }
       if (data) {
         _this.data[name] = data;
       }
       _this.trigger(name, err, data);
       --_this.n || (_this._done = true && _.map(_this.doneSubs, function(sub) {
-        return sub(_this.error, _this.data);
+        return sub(_this.err, _this.data);
       }));
       return void 0;
     };
@@ -91,7 +94,7 @@
 
   parallelBucket.prototype.done = function(callback) {
     if (this._done) {
-      return callback(this.error, this.data);
+      return callback(this.err, this.data);
     } else {
       return this.doneSubs.push(callback);
     }
@@ -103,7 +106,6 @@
       n: 0,
       size: 5,
       data: {},
-      err: {},
       queue: [],
       doneSubs: []
     }, options);
@@ -132,7 +134,12 @@
       _ref = _this.queue.pop(), name = _ref[0], f = _ref[1];
       f(function(err, data) {
         _this.n--;
-        _this.err[name] = err;
+        if (err) {
+          if (!_this.err) {
+            _this.err = {};
+          }
+          _this.err[name] = err;
+        }
         _this.data[name] = data;
         return popqueue();
       });
