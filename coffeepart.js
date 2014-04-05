@@ -109,17 +109,18 @@
     }, options);
   };
 
-  queue.prototype.push = function(name, f) {
+  queue.prototype.push = function(name, f, callback) {
     if (name.constructor === Function) {
       f = name && (name = this.namecounter++);
     }
-    this.queue.push([name, f]);
+    this.queue.push([name, f, callback]);
     return this.start();
   };
 
   queue.prototype.start = function(callback) {
     var popqueue,
       _this = this;
+    this.done(callback);
     popqueue = function() {
       var f, name, _ref;
       if (!_this.queue.length && !_this.n) {

@@ -66,12 +66,14 @@ parallelBucket::done = (callback) -> if @_done then callback(@error,@data) else 
 exports.queue = queue = (options) ->
     _.extend @, { namecounter: 0, n: 0, size: 5, data: {}, err: {}, queue: [], doneSubs: [] }, options
 
-queue::push = (name,f) ->
+queue::push = (name,f,callback) ->
     if name.constructor is Function then f = name and name = @namecounter++ # name is optional
-    @queue.push [name, f]
+    @queue.push [name, f, callback]
     @start()
         
 queue::start = (callback) ->
+    @done callback
+        
     popqueue = =>
         if not @queue.length and not @n then return @triggerDone()
         if not @queue.length or @n >= @size then return
