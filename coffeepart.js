@@ -274,6 +274,17 @@
     return ret;
   };
 
+  exports.dictFromArray = function(array, cb) {
+    var ret;
+    ret = {};
+    _.map(array, function(elem, index) {
+      var key, value, _ref;
+      _ref = cb(elem, index), key = _ref[0], value = _ref[1];
+      return ret[key] = value;
+    });
+    return ret;
+  };
+
   exports.dictMap = exports.dictmap = function(dict, callback) {
     var res;
     if (dict.constructor === Array) {

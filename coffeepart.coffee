@@ -156,6 +156,12 @@ exports.makeDict = (array) ->
     _.map array, (elem) -> ret[elem] = true
     ret
 
+exports.dictFromArray = (array,cb) ->
+    ret = {}
+    _.map array, (elem,index) ->
+        [key, value] = cb(elem,index)
+        ret[key] = value
+    ret
 
 exports.dictMap = exports.dictmap = (dict,callback) ->
     if dict.constructor is Array then dict = exports.makeDict dict

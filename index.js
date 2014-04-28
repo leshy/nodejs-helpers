@@ -44,6 +44,13 @@ exports.prettyDate = function(date){
 	    Math.ceil( day_diff / 31 ) + " months ago";
 
 }
+
+// get day by name for a date object
+exports.getDay = function (date) {
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    return days[date.getDay()]
+}
+
 // takes a size in bytes and returns a string
 exports.prettySize = function(bytes) {
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
