@@ -45,7 +45,7 @@ exports.prettyDate = function(date){
 
 }
 
-// get day by name for a date object
+// get day by name from a date object
 exports.getDay = function (date) {
     var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     return days[date.getDay()]
