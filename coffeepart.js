@@ -442,12 +442,18 @@
     if (chars == null) {
       chars = "\\s";
     }
+    if (!str) {
+      return "";
+    }
     return str.replace(new RegExp("^[" + chars + "]+", "g"), "");
   };
 
   exports.rtrim = function(str, chars) {
     if (chars == null) {
       chars = "\\s";
+    }
+    if (!str) {
+      return "";
     }
     return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
   };
@@ -490,6 +496,16 @@
       return text = chr + text;
     });
     return text;
+  };
+
+  exports.jaccardIndex = function(set1, set2) {
+    if (set1.constructor === Object) {
+      set1 = _.keys(set1);
+    }
+    if (set2.constructor === Object) {
+      set2 = _.keys(set2);
+    }
+    return _.intersection(set1, set2).length / _.union(set1, set2).length;
   };
 
 }).call(this);

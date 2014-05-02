@@ -232,10 +232,12 @@ exports.arrayToDict = (iterable,callbackVal,callbackKey) ->
 
 exports.trim = exports.strip = (str, chars) -> exports.ltrim(exports.rtrim(str, chars), chars)
 
-exports.ltrim = (str, chars="\\s") -> 
+exports.ltrim = (str, chars="\\s") ->
+    if not str then return ""
     str.replace(new RegExp("^[" + chars + "]+", "g"), "")
  
-exports.rtrim = (str, chars="\\s") -> 
+exports.rtrim = (str, chars="\\s") ->
+    if not str then return ""
     str.replace(new RegExp("[" + chars + "]+$", "g"), "")
 
 exports.makePath = (elements...) ->
@@ -252,3 +254,10 @@ exports.pad = (text,length,chr="0") ->
     if text.length >= length then return text
     _.times length - text.length, -> text = chr + text
     text
+
+# http://en.wikipedia.org/wiki/Jaccard_index
+exports.jaccardIndex = (set1, set2) ->
+    if set1.constructor is Object then set1 = _.keys(set1)
+    if set2.constructor is Object then set2 = _.keys(set2)
+    _.intersection(set1, set2).length / _.union(set1, set2).length
+
