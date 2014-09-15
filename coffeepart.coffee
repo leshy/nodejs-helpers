@@ -104,7 +104,7 @@ queue::done = (callback) -> @doneSubs.push callback
 depthFirst = (target, clone, callback) ->
     if target.constructor is Object or target.constructor is Array
         for key of target
-            @depthfirst target[key], (data) -> if not data delete target[key] else target[key] = data
+            @depthfirst target[key], (data) -> if not data then delete target[key] else target[key] = data
         target
     else response = callback(target)
 
@@ -260,4 +260,8 @@ exports.jaccardIndex = (set1, set2) ->
     if set1.constructor is Object then set1 = _.keys(set1)
     if set2.constructor is Object then set2 = _.keys(set2)
     _.intersection(set1, set2).length / _.union(set1, set2).length
+
+
+exports.prettyNumber = (number) ->
+    Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
