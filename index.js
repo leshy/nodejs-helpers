@@ -52,7 +52,7 @@ exports.getDay = function (date) {
 }
 // get day by name from a date object
 exports.getShortDay = function (date) {
-    return helpers.getDay(date).slice(0,3)
+    return exports.getDay(date).slice(0,3)
 }
 
 // takes a size in bytes and returns a string
