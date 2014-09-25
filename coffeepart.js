@@ -517,4 +517,11 @@
     return Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
+  exports.prettyDateFull = function(d) {
+    if (d.constructor !== Date) {
+      d = new Date(d);
+    }
+    return d.getFullYear() + "/" + exports.pad(d.getMonth() + 1, 2) + "/" + exports.pad(d.getDate(), 2) + " " + helpers.getShortDay(d) + " at " + exports.pad(d.getHours(), 2) + ":" + exports.pad(d.getMinutes(), 2) + " (" + helpers.prettyDate(d) + ")";
+  };
+
 }).call(this);

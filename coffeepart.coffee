@@ -265,3 +265,6 @@ exports.jaccardIndex = (set1, set2) ->
 exports.prettyNumber = (number) ->
     Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
+exports.prettyDateFull = (d) ->
+    if d.constructor isnt Date then d = new Date d
+    d.getFullYear() + "/" + exports.pad(d.getMonth() + 1,2) + "/" + exports.pad(d.getDate(),2) + " " + helpers.getShortDay(d) + " at " + exports.pad(d.getHours(),2) + ":" + exports.pad(d.getMinutes(),2) + " (" + helpers.prettyDate(d) + ")"
