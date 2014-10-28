@@ -108,7 +108,6 @@
       namecounter: 0,
       n: 0,
       size: 5,
-      data: {},
       queue: [],
       doneSubs: []
     }, options);
@@ -143,7 +142,12 @@
             }
             _this.err[name] = err;
           }
-          _this.data[name] = data;
+          if (data) {
+            if (!_this.data) {
+              _this.data = {};
+            }
+            _this.data[name] = data;
+          }
           return popqueue();
         });
         return popqueue();
@@ -523,5 +527,11 @@
     }
     return d.getFullYear() + "/" + exports.pad(d.getMonth() + 1, 2) + "/" + exports.pad(d.getDate(), 2) + " " + helpers.getShortDay(d) + " at " + exports.pad(d.getHours(), 2) + ":" + exports.pad(d.getMinutes(), 2) + " (" + helpers.prettyDate(d) + ")";
   };
+
+  exports.Kilo = 1000;
+
+  exports.Mega = exports.Kilo * 1000;
+
+  exports.Giga = exports.Mega * 1000;
 
 }).call(this);
