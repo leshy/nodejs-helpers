@@ -66,7 +66,7 @@ parallelBucket::on = (name,callback) ->
 parallelBucket::done = (callback) -> if @_done then callback(@err,@data) else @doneSubs.push callback
 
 exports.queue = queue = (options) ->
-    _.extend @, { namecounter: 0, n: 0, size: 5, data: {}, queue: [], doneSubs: [] }, options
+    _.extend @, { namecounter: 0, n: 0, size: 5, queue: [], doneSubs: [] }, options
 
 queue::push = (name,f,callback) ->
     if name.constructor is Function then f = name and name = @namecounter++ # name is optional
@@ -87,7 +87,11 @@ queue::start = () ->
             if err
                 if not @err then @err = {}
                 @err[name] = err
-            @data[name] = data
+                
+            if data
+                if not @data then @data = {}
+                @data[name] = data
+                
             popqueue()
             
         popqueue()            
@@ -249,6 +253,7 @@ exports.joinF = (functs...) -> _.map functs, (f) -> f()
 
 exports.filename = (path) -> path.replace /^.*[\\\/]/, ''
 
+
 exports.pad = (text,length,chr="0") ->
     if text.constructor isnt String then text = String text
     if text.length >= length then return text
@@ -268,3 +273,9 @@ exports.prettyNumber = (number) ->
 exports.prettyDateFull = (d) ->
     if d.constructor isnt Date then d = new Date d
     d.getFullYear() + "/" + exports.pad(d.getMonth() + 1,2) + "/" + exports.pad(d.getDate(),2) + " " + helpers.getShortDay(d) + " at " + exports.pad(d.getHours(),2) + ":" + exports.pad(d.getMinutes(),2) + " (" + helpers.prettyDate(d) + ")"
+
+
+
+exports.Kilo = 1000
+exports.Mega = exports.Kilo * 1000
+exports.Giga = exports.Mega * 1000
