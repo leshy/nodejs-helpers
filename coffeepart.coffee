@@ -18,7 +18,6 @@ exports.forceCallback = forceCallback = (f,args...,callback) ->
 exports.forceCallbackWrap = forceCallbackWrap = (f,args...) ->
     (callback) -> forceCallback.apply(this, [].concat(f,args,callback))
 
-
 # like async.parallel but functions to be executed are pushed dinamically (look at tests)
 # 
 # this should block when dispatching cb()

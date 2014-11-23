@@ -11,9 +11,6 @@
         "underscore": "1.x"
     },
     "main": "index",
-    "engines": {
-        "node": "node >= 0.4.x"
-    }
 }
 
 
