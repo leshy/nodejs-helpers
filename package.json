@@ -10,7 +10,7 @@
     "dependencies": {
         "underscore": "1.x"
     },
-    "main": "index",
+    "main": "index"
 }
 
 
