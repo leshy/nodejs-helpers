@@ -114,4 +114,17 @@ exports.normalizeDict = (test) ->
 exports.pad = (test) ->
     test.equals helpers.pad("bla",5,"X"), "XXbla"
     test.done()
-    
+
+
+exports.zip = (test) ->
+    a = [1,2,3,4]
+    b = ['a','b','c']
+    test.deepEqual helpers.zip(a,b), [ [ 1, 'a' ], [ 2, 'b' ], [ 3, 'c' ], [ 4, undefined ] ]
+    test.done()
+
+exports.squish = (test) ->
+    a = [1,2,3,4]
+    b = [8,5,1,1]
+    test.deepEqual helpers.squish( a, b, (a,b) -> a+b), [ 9, 7, 4, 5 ]
+    test.done()
+        

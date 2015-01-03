@@ -154,9 +154,11 @@ exports.dictArrayMap = (dict,key,callback) ->
 
 
 # previously stupidly named hashfromlist
-exports.makeDict = (array) ->
+exports.makeDict = (array,callback) ->
     ret = {}
-    _.map array, (elem) -> ret[elem] = true
+    _.map array, (elem) ->
+        if callback then elem = callback(elem)
+        ret[elem] = true
     ret
 
 exports.dictFromArray = (array,cb) ->
@@ -174,6 +176,7 @@ exports.dictMap = exports.dictmap = (dict,callback) ->
         if newvalue is undefined then return
         res[key] = newvalue
     res
+
 
 
 exports.uniMap = exports.unimap = (something,callback) ->    
@@ -274,7 +277,21 @@ exports.prettyDateFull = (d) ->
     d.getFullYear() + "/" + exports.pad(d.getMonth() + 1,2) + "/" + exports.pad(d.getDate(),2) + " " + helpers.getShortDay(d) + " at " + exports.pad(d.getHours(),2) + ":" + exports.pad(d.getMinutes(),2) + " (" + helpers.prettyDate(d) + ")"
 
 
+exports.basicTime = (d) ->
+    if d.constructor isnt Date then d = new Date d
+    exports.pad(d.getHours(),2) + ":" + exports.pad(d.getMinutes(),2) + ":" + exports.pad(d.getSeconds(),2)
 
 exports.Kilo = 1000
 exports.Mega = exports.Kilo * 1000
 exports.Giga = exports.Mega * 1000
+
+
+# pythons zip function
+exports.zip = (arrays...) ->
+    maxLen = _.reduce arrays, ((maxLen, array) -> if array.length > maxLen then array.length else maxLen), 0
+    _(maxLen).times (index) -> _.map arrays, (array) -> array[index]
+
+# like parallel map through multiple arrays
+exports.squish = (arrays...,callback) ->
+    maxLen = _.reduce arrays, ((maxLen, array) -> if array.length > maxLen then array.length else maxLen), 0
+    _(maxLen).times (index) -> callback.apply @, _.map arrays, (array) -> array[index]

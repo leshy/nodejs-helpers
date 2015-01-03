@@ -205,7 +205,8 @@ exports.makedict = makedict = function (elements,key) {
             keyval = key(obj)
         }
 
-        dictadd(dict,keyval,obj)
+        dict[keyval] = obj
+        //dictadd(dict,keyval,obj)
 
     })
     return dict
