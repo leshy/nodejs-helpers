@@ -202,4 +202,32 @@
     return test.done();
   };
 
+  exports.mapFind = function(test) {
+    var a;
+    a = [1, 2, 3, 4];
+    test.equal(helpers.mapFind(a, function(e) {
+      if (e === 3) {
+        return "a";
+      } else {
+        return false;
+      }
+    }), "a");
+    return test.done();
+  };
+
+  exports.difference = function(test) {
+    var a, adiff, b, bdiff, _ref;
+    a = ["bla", "faf", "bx", "gla"];
+    b = ["gog", "laa", "xa", "faq"];
+    _ref = helpers.difference(a, b, (function(x) {
+      return x + "a";
+    }), (function(x) {
+      return "b" + x;
+    })), adiff = _ref[0], bdiff = _ref[1];
+    console.log(a);
+    console.log(b);
+    console.log([adiff, bdiff]);
+    return test.done();
+  };
+
 }).call(this);

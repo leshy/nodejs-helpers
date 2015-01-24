@@ -251,10 +251,9 @@ exports.makePath = (elements...) ->
 
 exports.identity = (x) -> x
 
-exports.joinF = (functs...) -> _.map functs, (f) -> f()
+exports.joinF = (functs...) -> (args...) -> _.map functs, (f) => f.apply @, args
 
 exports.filename = (path) -> path.replace /^.*[\\\/]/, ''
-
 
 exports.pad = (text,length,chr="0") ->
     if text.constructor isnt String then text = String text
@@ -291,7 +290,50 @@ exports.zip = (arrays...) ->
     maxLen = _.reduce arrays, ((maxLen, array) -> if array.length > maxLen then array.length else maxLen), 0
     _(maxLen).times (index) -> _.map arrays, (array) -> array[index]
 
-# like parallel map through multiple arrays
+# like map through multiple arrays
 exports.squish = (arrays...,callback) ->
     maxLen = _.reduce arrays, ((maxLen, array) -> if array.length > maxLen then array.length else maxLen), 0
     _(maxLen).times (index) -> callback.apply @, _.map arrays, (array) -> array[index]
+
+exports.mapFind = (array,callback) ->
+    ret = undefined
+    _.find array, (element) -> ret = callback(element)
+    ret
+    
+exports.mapFilter = (array,callback) ->
+    ret = []
+    _.each array, (x) ->
+        res = callback(x)
+        if res then ret.push res
+    ret
+
+exports.id = id = (x) -> x
+
+exports.difference = (array1, array2, compare1, compare2) ->
+    if not compare1 then compare1 = id
+    if not compare2 then compare2 = compare1
+    a1diff = []
+    a2diff = []
+    
+    a1compare = _.map array1, (x) -> { c: compare1(x), x: x }    
+    a2compare = _.map array2, (x) -> { c: compare2(x), x: x }
+
+    #console.log 'a1compare', a1compare
+    #console.log 'a2compare', a2compare
+    a1intersection = []
+    
+    _.each a1compare, (x1) ->
+        found = _.find a2compare, (x2) -> if x1.c is x2.c then return x2.matched = true
+        if not found then return a1diff.push x1.x
+        a1intersection.push x1.x
+    
+    a2diff = exports.mapFilter(a2compare, (x) -> if not x.matched then x.x else false)
+
+    return [ a1intersection, a1diff, a2diff ]
+    
+
+
+
+
+exports.objorclass = objorclass = (x,attr) ->
+    if typeof(x) is 'object' then x[attr] else x::[attr]

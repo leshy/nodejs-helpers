@@ -127,4 +127,19 @@ exports.squish = (test) ->
     b = [8,5,1,1]
     test.deepEqual helpers.squish( a, b, (a,b) -> a+b), [ 9, 7, 4, 5 ]
     test.done()
-        
+
+exports.mapFind = (test) ->
+    a = [1,2,3,4]
+    test.equal helpers.mapFind(a, (e) -> if e is 3 then "a" else false), "a"
+    test.done()
+
+exports.difference = (test) ->
+    a = ["bla", "faf", "bx", "gla"]
+    b = ["gog", "laa", "xa", "faq"]
+
+    [adiff, bdiff ] = helpers.difference a, b, ((x) -> x + "a"), ((x) -> "b" + x)
+    console.log a
+    console.log b
+    console.log [adiff, bdiff ]
+    test.done()
+    
