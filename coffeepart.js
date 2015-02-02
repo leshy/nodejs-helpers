@@ -292,7 +292,9 @@
     _.map(array, function(elem, index) {
       var key, value, _ref;
       _ref = cb(elem, index), key = _ref[0], value = _ref[1];
-      return ret[key] = value;
+      if (key) {
+        return ret[key] = value;
+      }
     });
     return ret;
   };

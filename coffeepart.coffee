@@ -165,7 +165,7 @@ exports.dictFromArray = (array,cb) ->
     ret = {}
     _.map array, (elem,index) ->
         [key, value] = cb(elem,index)
-        ret[key] = value
+        if key then ret[key] = value
     ret
 
 exports.dictMap = exports.dictmap = (dict,callback) ->
