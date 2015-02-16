@@ -1,13 +1,5 @@
 var _ = require('underscore')
 
-// calls function if it exists
-exports.cbc = function() { 
-    var args = exports.toArray(arguments)
-    if (!args.length) { return }
-    var callback = args.shift()
-    if (callback) { callback.apply(this,args) }
-}
-
 exports.cb = function(callback) { if (callback) { return callback } else { return function () {} } }
 
 // converts retarded magical arguments object to an Array object

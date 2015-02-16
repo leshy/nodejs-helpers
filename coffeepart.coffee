@@ -96,11 +96,19 @@ queue::start = () ->
         popqueue()            
 
     popqueue()
-                
+
+exports.cbc = cbc = (args...) ->
+    if not args.length then return
+    if callback = args.shift() then callback.apply @, args
+
 queue::triggerDone = ->
-    _.map @doneSubs, (sub) => sub(@err,@data)
+    @_done = true
+    _.map @doneSubs, (sub) => cbc sub, @err, @data
     
-queue::done = (callback) -> @doneSubs.push callback
+queue::done = (callback) ->
+    @doneSubs.push callback
+    
+    if @_done then callback @err, @data
     
 
 # depthfirst search and modify through JSON
@@ -136,6 +144,7 @@ exports.extend = extend = (destination, targets...) ->
 
 # operations for dealing with a dictionary of arrays
 # --------------------------------------------------
+
 exports.dictpush = (dict,key,value) ->
     if not arr = dict[key] then arr = dict[key] = []
     arr.push value
@@ -150,6 +159,7 @@ exports.dictArrayMap = (dict,key,callback) ->
     if not dict[key] then return
     if dict[key].constructor isnt Array then callback null, dict[key]
     else _.map dict[key], (val) -> callback null, val
+
 # --------------------------------------------------
 
 
