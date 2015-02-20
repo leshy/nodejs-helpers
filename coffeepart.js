@@ -487,7 +487,7 @@
     return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
   };
 
-  exports.makePath = function() {
+  exports.makePath = exports.path = function() {
     var elements;
     elements = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return "/" + _.map(_.flatten(elements), function(element) {
@@ -678,6 +678,31 @@
     } else {
       return x.prototype[attr];
     }
+  };
+
+  exports.array = function(something) {
+    if (!something) {
+      return [];
+    }
+    if (something.constructor !== Array) {
+      return [something];
+    } else {
+      return something;
+    }
+  };
+
+  exports.unshift = function() {
+    var array, elements;
+    array = arguments[0], elements = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    array.unshift.apply(array, elements);
+    return array;
+  };
+
+  exports.push = function() {
+    var array, elements;
+    array = arguments[0], elements = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    array.push.apply(array, elements);
+    return array;
   };
 
 }).call(this);

@@ -256,7 +256,7 @@ exports.rtrim = (str, chars="\\s") ->
     if not str then return ""
     str.replace(new RegExp("[" + chars + "]+$", "g"), "")
 
-exports.makePath = (elements...) ->
+exports.makePath = exports.path = (elements...) ->
     "/" + _.map(_.flatten(elements), (element) -> exports.trim element, '\/').join('/')
 
 exports.identity = (x) -> x
@@ -342,8 +342,18 @@ exports.difference = (array1, array2, compare1, compare2) ->
     return [ a1intersection, a1diff, a2diff ]
     
 
-
-
-
 exports.objorclass = objorclass = (x,attr) ->
     if typeof(x) is 'object' then x[attr] else x::[attr]
+
+
+exports.array = (something) ->
+    if not something then return []
+    if something.constructor isnt Array then [ something ] else something
+
+exports.unshift = (array, elements...) ->
+    array.unshift.apply array, elements
+    array
+    
+exports.push = (array, elements...) ->
+    array.push.apply array, elements
+    array    
