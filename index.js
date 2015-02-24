@@ -171,6 +171,7 @@ exports.Minute = exports.minute = 1000 * 60
 exports.Hour = exports.hour = exports.Minute * 60
 exports.Day = exports.day = exports.Hour * 24
 exports.Month = exports.month = exports.Day * 30
+exports.Year = exports.year = exports.Month * 30
 exports.Now = exports.now = function () { return new Date().getTime() }
 
 exports.isEmpty = function (ob){
