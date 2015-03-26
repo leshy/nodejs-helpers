@@ -230,6 +230,7 @@ searchCache = function (moduleName, callback) {
 };
 
 // slowly rewriting this thing to coffeescript..
-coffeepart = require('./coffeepart')
-_.extend(exports, coffeepart)
+_.extend(exports, require('./coffeepart'))
+_.extend(exports, livescriptpart = require('./livescriptpart'))
+
 

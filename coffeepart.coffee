@@ -356,4 +356,17 @@ exports.unshift = (array, elements...) ->
     
 exports.push = (array, elements...) ->
     array.push.apply array, elements
-    array    
+    array
+
+
+#
+# sometimes when claling defer.resolve,
+# I want to resolve to an unresolved promise, not chain.
+# this is my dumb hack, why the hell this isn't possible by default?
+# 
+exports.sneakyPromise = class sneakyPromise
+    constructor: (@promise) ->
+    gimme: -> @promise
+
+exports.sneaky = (promise) ->
+    new exports.sneakyPromise promise

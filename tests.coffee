@@ -142,4 +142,10 @@ exports.difference = (test) ->
     console.log b
     console.log [adiff, bdiff ]
     test.done()
+
+
+exports.wrap = (test) ->
+    test.equal (helpers.unwrap helpers.wrap 'bla'), 'bla'
+    test.done()
+
     
