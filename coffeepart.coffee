@@ -188,7 +188,6 @@ exports.dictMap = exports.dictmap = (dict,callback) ->
     res
 
 
-
 exports.uniMap = exports.unimap = (something,callback) ->    
     if something.constructor is Array then return _.map something, callback
     if something.constructor is Object then return exports.dictMap something,callback
