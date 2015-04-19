@@ -289,6 +289,13 @@
     }
   };
 
+  exports["delete"] = function(dict, key) {
+    var val;
+    val = dict[key];
+    delete dict[key];
+    return val;
+  };
+
   exports.makeDict = function(array, callback) {
     var ret;
     ret = {};
@@ -720,6 +727,15 @@
 
   exports.sneaky = function(promise) {
     return new exports.sneakyPromise(promise);
+  };
+
+  exports.swap = function(dict) {
+    var res;
+    res = {};
+    _.map(dict, function(value, key) {
+      return res[value] = key;
+    });
+    return res;
   };
 
 }).call(this);

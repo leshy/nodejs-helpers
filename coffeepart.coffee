@@ -103,11 +103,11 @@ exports.cbc = cbc = (args...) ->
 
 queue::triggerDone = ->
     @_done = true
-    _.map @doneSubs, (sub) => cbc sub, @err, @data
+    _.map @doneSubs, (sub) =>
+        cbc sub, @err, @data
     
 queue::done = (callback) ->
     @doneSubs.push callback
-    
     if @_done then callback @err, @data
     
 
@@ -162,7 +162,11 @@ exports.dictArrayMap = (dict,key,callback) ->
 
 # --------------------------------------------------
 
-
+exports.delete = (dict,key) ->
+    val = dict[key]
+    delete dict[key]
+    val
+    
 # previously stupidly named hashfromlist
 exports.makeDict = (array,callback) ->
     ret = {}
@@ -286,8 +290,8 @@ exports.prettyDateFull = (d) ->
 
 
 exports.basicTime = (d) ->
-    if d.constructor isnt Date then d = new Date d
-    exports.pad(d.getHours(),2) + ":" + exports.pad(d.getMinutes(),2) + ":" + exports.pad(d.getSeconds(),2)
+    if d.constructor isnt Date then d = new Date(d)
+    return exports.pad(d.getHours(),2) + ":" + exports.pad(d.getMinutes(),2) + ":" + exports.pad(d.getSeconds(),2)
 
 exports.Kilo = 1000
 exports.Mega = exports.Kilo * 1000
@@ -369,3 +373,8 @@ exports.sneakyPromise = class sneakyPromise
 
 exports.sneaky = (promise) ->
     new exports.sneakyPromise promise
+
+exports.swap = (dict) ->
+    res = {}
+    _.map dict, (value,key) -> res[value] = key
+    res
