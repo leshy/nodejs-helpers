@@ -162,10 +162,10 @@ exports.dictArrayMap = (dict,key,callback) ->
 
 # --------------------------------------------------
 
-exports.delete = (dict,key) ->
+exports.del = (dict,key) ->
     val = dict[key]
     delete dict[key]
-    val
+    return val
     
 # previously stupidly named hashfromlist
 exports.makeDict = (array,callback) ->

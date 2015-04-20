@@ -289,7 +289,7 @@
     }
   };
 
-  exports["delete"] = function(dict, key) {
+  exports.del = function(dict, key) {
     var val;
     val = dict[key];
     delete dict[key];
