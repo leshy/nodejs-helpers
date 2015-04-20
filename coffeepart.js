@@ -540,6 +540,16 @@
     return text;
   };
 
+  exports.antipad = function(text, chr) {
+    if (chr == null) {
+      chr = "0";
+    }
+    while (text[text.length - 1] === chr) {
+      text = text.slice(0, text.length - 1);
+    }
+    return text;
+  };
+
   exports.jaccardIndex = function(set1, set2) {
     if (set1.constructor === Object) {
       set1 = _.keys(set1);

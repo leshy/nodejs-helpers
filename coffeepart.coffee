@@ -274,6 +274,11 @@ exports.pad = (text,length,chr="0") ->
     _.times length - text.length, -> text = chr + text
     text
 
+exports.antipad = (text,chr="0") ->
+    while text[text.length - 1] is chr
+        text = text.slice(0, text.length - 1)
+    text
+
 # http://en.wikipedia.org/wiki/Jaccard_index
 exports.jaccardIndex = (set1, set2) ->
     if set1.constructor is Object then set1 = _.keys(set1)
