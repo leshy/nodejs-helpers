@@ -526,7 +526,10 @@
 
   exports.pad = function(text, length, chr) {
     if (chr == null) {
-      chr = "0";
+      chr = 0;
+    }
+    if (!exports.bool(text)) {
+      text = "";
     }
     if (text.constructor !== String) {
       text = String(text);
@@ -746,6 +749,14 @@
       return res[value] = key;
     });
     return res;
+  };
+
+  exports.bool = function(something) {
+    if (something === 0) {
+      return true;
+    } else {
+      return Boolean(something);
+    }
   };
 
 }).call(this);

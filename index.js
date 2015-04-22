@@ -233,4 +233,5 @@ searchCache = function (moduleName, callback) {
 _.extend(exports, require('./coffeepart'))
 _.extend(exports, livescriptpart = require('./livescriptpart'))
 
+_.extend(exports, require('./wrappers'))
 

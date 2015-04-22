@@ -1,4 +1,4 @@
-helpers = require './index.js'
+helpers = h = require './index.js'
 async = require 'async'
 _ = require 'underscore'
 
@@ -144,8 +144,23 @@ exports.difference = (test) ->
     test.done()
 
 
-exports.wrap = (test) ->
-    test.equal (helpers.unwrap helpers.wrap 'bla'), 'bla'
-    test.done()
-
+exports.once = (test) ->
+    cnt = 0
     
+    testf = (callback) -> h.wait 100, ->
+        cnt += 1
+        callback undefined, 1
+        
+    testfd = h.wrap.once testf
+
+    cbcnt = 0
+
+    testcb = (err,data) ->
+        cbcnt += data
+        if cbcnt is 3
+            test.equals cnt, 1
+            test.done()
+
+    testfd(testcb)
+    helpers.wait 10, -> testfd(testcb)
+    helpers.wait 50, -> testfd(testcb)        

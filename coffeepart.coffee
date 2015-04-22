@@ -268,7 +268,8 @@ exports.joinF = (functs...) -> (args...) -> _.map functs, (f) => f.apply @, args
 
 exports.filename = (path) -> path.replace /^.*[\\\/]/, ''
 
-exports.pad = (text,length,chr="0") ->
+exports.pad = (text,length,chr=0) ->
+    if not exports.bool(text) then text = ""
     if text.constructor isnt String then text = String text
     if text.length >= length then return text
     _.times length - text.length, -> text = chr + text
@@ -383,3 +384,8 @@ exports.swap = (dict) ->
     res = {}
     _.map dict, (value,key) -> res[value] = key
     res
+
+# proper fucking boolean init
+exports.bool = (something) ->
+    if something is 0 then true
+    else Boolean something
