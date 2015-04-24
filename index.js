@@ -7,7 +7,7 @@ var toArray = exports.toArray = function(arg) { return Array.prototype.slice.cal
 
 // Takes a date object and returns a string
 exports.prettyDate = function(date){
-
+    if (date.constructor != Date) { date = new Date(date) }
 	var diff = (((new Date()).getTime() - date.getTime())) / 1000
     var day_diff = Math.floor(Math.abs(diff / 86400)) 
     if (diff < 0) { day_diff *= -1 }

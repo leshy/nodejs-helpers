@@ -19,7 +19,7 @@ exports.forceCallbackWrap = forceCallbackWrap = (f,args...) ->
     (callback) -> forceCallback.apply(this, [].concat(f,args,callback))
 
 # like async.parallel but functions to be executed are pushed dinamically (look at tests)
-# 
+#
 # this should block when dispatching cb()
 # it should support running particular number of parallel processes,
 # OR it should support queueing
@@ -32,7 +32,7 @@ exports.parallelBucket = parallelBucket = (options) ->
     @subs = {} # function name - subscription
     @doneSubs = [] # subscriptions to be called when all function are done with execution
     @callbacks = {} # callback name - number of times called
-    
+
     @
 
 parallelBucket::cb = (name) ->
@@ -40,7 +40,7 @@ parallelBucket::cb = (name) ->
     if not name then name = @n
 
     @callbacks[name] = 1
-    
+
     (err,data) =>
         if @callbacks[name] > 1 then console.warn "parallelbucket callback '#{ name } called more then once'"
         @callbacks[name] += 1
@@ -57,7 +57,7 @@ parallelBucket::cb = (name) ->
 
 parallelBucket::trigger = (name,args...) ->
     exports.dictArrayMap @subs, name, (err,sub) => sub.apply @, args
-    
+
 parallelBucket::on = (name,callback) ->
     exports.dictpush @subs, name, callback
     if @callbacks[name] > 1 then callback null, @data[name]
@@ -71,14 +71,14 @@ queue::push = (name,f,callback) ->
     if name.constructor is Function then f = name and name = @namecounter++ # name is optional
     @queue.push [name, f, callback]
     @start()
-        
+
 queue::start = () ->
     popqueue = =>
         if not @queue.length and not @n then return @triggerDone()
         if not @queue.length or @n >= @size then return
-            
+
         @n++
-        
+
         [ name, f ] = @queue.pop()
 
         f (err,data) =>
@@ -86,14 +86,14 @@ queue::start = () ->
             if err
                 if not @err then @err = {}
                 @err[name] = err
-                
+
             if data
                 if not @data then @data = {}
                 @data[name] = data
-                
+
             popqueue()
-            
-        popqueue()            
+
+        popqueue()
 
     popqueue()
 
@@ -105,11 +105,11 @@ queue::triggerDone = ->
     @_done = true
     _.map @doneSubs, (sub) =>
         cbc sub, @err, @data
-    
+
 queue::done = (callback) ->
     @doneSubs.push callback
     if @_done then callback @err, @data
-    
+
 
 # depthfirst search and modify through JSON
 depthFirst = (target, clone, callback) ->
@@ -166,7 +166,7 @@ exports.del = (dict,key) ->
     val = dict[key]
     delete dict[key]
     return val
-    
+
 # previously stupidly named hashfromlist
 exports.makeDict = (array,callback) ->
     ret = {}
@@ -192,7 +192,7 @@ exports.dictMap = exports.dictmap = (dict,callback) ->
     res
 
 
-exports.uniMap = exports.unimap = (something,callback) ->    
+exports.uniMap = exports.unimap = (something,callback) ->
     if something.constructor is Array then return _.map something, callback
     if something.constructor is Object then return exports.dictMap something,callback
     return callback(something)
@@ -211,7 +211,7 @@ exports.shortTime = ( time = new Date()) ->
         n = String(n)
         if n.length is 1 then n = "0" + n
         n
-        
+
     if time.constructor isnt Date then time = new Date(time)
     appendzero(time.getHours()) + ":" + appendzero(time.getMinutes()) + ":" + appendzero(time.getSeconds())
 
@@ -232,7 +232,7 @@ exports.normalize = (data) ->
     if data.constructor is Array then return exports.normalizeList data
     if data.constructor is Object then return exports.normalizeDict data
     throw "unknown data type, can't normalize"
-            
+
 exports.round = (x, n=3) ->
     n = Math.pow(10, n)
     Math.round(x * n) / n
@@ -254,7 +254,7 @@ exports.trim = exports.strip = (str, chars) -> exports.ltrim(exports.rtrim(str, 
 exports.ltrim = (str, chars="\\s") ->
     if not str then return ""
     str.replace(new RegExp("^[" + chars + "]+", "g"), "")
- 
+
 exports.rtrim = (str, chars="\\s") ->
     if not str then return ""
     str.replace(new RegExp("[" + chars + "]+$", "g"), "")
@@ -286,14 +286,12 @@ exports.jaccardIndex = (set1, set2) ->
     if set2.constructor is Object then set2 = _.keys(set2)
     _.intersection(set1, set2).length / _.union(set1, set2).length
 
-
 exports.prettyNumber = (number) ->
     Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
 exports.prettyDateFull = (d) ->
     if d.constructor isnt Date then d = new Date d
     d.getFullYear() + "/" + exports.pad(d.getMonth() + 1,2) + "/" + exports.pad(d.getDate(),2) + " " + helpers.getShortDay(d) + " at " + exports.pad(d.getHours(),2) + ":" + exports.pad(d.getMinutes(),2) + " (" + helpers.prettyDate(d) + ")"
-
 
 exports.basicTime = (d) ->
     if d.constructor isnt Date then d = new Date(d)
@@ -318,7 +316,7 @@ exports.mapFind = (array,callback) ->
     ret = undefined
     _.find array, (element) -> ret = callback(element)
     ret
-    
+
 exports.mapFilter = (array,callback) ->
     ret = []
     _.each array, (x) ->
@@ -333,23 +331,23 @@ exports.difference = (array1, array2, compare1, compare2) ->
     if not compare2 then compare2 = compare1
     a1diff = []
     a2diff = []
-    
-    a1compare = _.map array1, (x) -> { c: compare1(x), x: x }    
+
+    a1compare = _.map array1, (x) -> { c: compare1(x), x: x }
     a2compare = _.map array2, (x) -> { c: compare2(x), x: x }
 
     #console.log 'a1compare', a1compare
     #console.log 'a2compare', a2compare
     a1intersection = []
-    
+
     _.each a1compare, (x1) ->
         found = _.find a2compare, (x2) -> if x1.c is x2.c then return x2.matched = true
         if not found then return a1diff.push x1.x
         a1intersection.push x1.x
-    
+
     a2diff = exports.mapFilter(a2compare, (x) -> if not x.matched then x.x else false)
 
     return [ a1intersection, a1diff, a2diff ]
-    
+
 
 exports.objorclass = objorclass = (x,attr) ->
     if typeof(x) is 'object' then x[attr] else x::[attr]
@@ -362,7 +360,7 @@ exports.array = (something) ->
 exports.unshift = (array, elements...) ->
     array.unshift.apply array, elements
     array
-    
+
 exports.push = (array, elements...) ->
     array.push.apply array, elements
     array
@@ -372,7 +370,7 @@ exports.push = (array, elements...) ->
 # sometimes when claling defer.resolve,
 # I want to resolve to an unresolved promise, not chain.
 # this is my dumb hack, why the hell this isn't possible by default?
-# 
+#
 exports.sneakyPromise = class sneakyPromise
     constructor: (@promise) ->
     gimme: -> @promise
