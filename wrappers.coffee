@@ -1,6 +1,8 @@
 _ = require 'underscore'
 
 exports.wrap =
+
+    # will execute an asyc function once, and cache the result for the next time
     once: (f) ->
         options =
             state: 0

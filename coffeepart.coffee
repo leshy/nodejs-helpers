@@ -134,13 +134,15 @@ exports.shuffle = (stuff) ->
 
 exports.commenterr = (err,comment) -> if err then comment + ": " + err else undefined
 
-# recursive extend
-exports.extend = extend = (destination, targets...) ->
+# immutable recursive extend
+exports.extend = extend = (targets...) ->
+    destination = {}
     _.map targets, (target) ->
         _.map target, (value,key) ->
             if destination[key]?.constructor is Object then destination[key] = extend destination[key], value
             else destination[key] = value
     destination
+
 
 # operations for dealing with a dictionary of arrays
 # --------------------------------------------------
@@ -169,6 +171,7 @@ exports.del = (dict,key) ->
 
 # previously stupidly named hashfromlist
 exports.makeDict = (array,callback) ->
+    if array.constructor is Object then return array
     ret = {}
     _.map array, (elem) ->
         if callback then elem = callback(elem)
