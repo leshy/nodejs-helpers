@@ -143,6 +143,14 @@ exports.extend = extend = (targets...) ->
             else destination[key] = value
     destination
 
+# mutable recursive extend
+exports.extendm = extendm = (destination,targets...) ->
+    _.map targets, (target) ->
+        _.map target, (value,key) ->
+            if destination[key]?.constructor is Object then destination[key] = extend destination[key], value
+            else destination[key] = value
+    destination
+
 
 # operations for dealing with a dictionary of arrays
 # --------------------------------------------------
@@ -181,8 +189,10 @@ exports.makeDict = (array,callback) ->
 exports.dictFromArray = (array,cb) ->
     ret = {}
     _.map array, (elem,index) ->
-        [key, value] = cb(elem,index)
-        if key then ret[key] = value
+        cbRet = cb(elem,index)
+        if cbRet
+            [key, value] = cbRet
+            ret[key] = value
     ret
 
 exports.dictMap = exports.dictmap = (dict,callback) ->
@@ -271,12 +281,22 @@ exports.joinF = (functs...) -> (args...) -> _.map functs, (f) => f.apply @, args
 
 exports.filename = (path) -> path.replace /^.*[\\\/]/, ''
 
-exports.pad = (text,length,chr=0) ->
+exports.abstractPad = abstractPad = (operation, text, length) ->
     if not exports.bool(text) then text = ""
     if text.constructor isnt String then text = String text
     if text.length >= length then return text
-    _.times length - text.length, -> text = chr + text
-    text
+
+    modifyText = (text) ->
+        if text.length is length then return text
+        else modifyText operation(text)
+
+    modifyText text
+
+exports.pad = (text,length,chr=0) ->
+    abstractPad ((text) -> chr + text), text, length
+exports.rpad = (text,length,chr=0) ->
+    abstractPad ((text) -> text + chr), text, length
+
 
 exports.antipad = (text,chr="0") ->
     while text[text.length - 1] is chr
@@ -319,6 +339,8 @@ exports.mapFind = (array,callback) ->
     ret = undefined
     _.find array, (element) -> ret = callback(element)
     ret
+
+exports.map = _.map
 
 exports.mapFilter = (array,callback) ->
     ret = []
