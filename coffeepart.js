@@ -360,10 +360,10 @@
   };
 
   exports.uniMap = exports.unimap = function(something, callback) {
-    if (something.constructor === Array) {
+    if ((something != null ? something.constructor : void 0) === Array) {
       return _.map(something, callback);
     }
-    if (something.constructor === Object) {
+    if ((something != null ? something.constructor : void 0) === Object) {
       return exports.dictMap(something, callback);
     }
     return callback(something);
