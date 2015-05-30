@@ -545,7 +545,7 @@
     return path.replace(/^.*[\\\/]/, '');
   };
 
-  exports.abstractPad = abstractPad = function(operation, text, length) {
+  exports.abstractPad = abstractPad = function(operation, success, text) {
     var modifyText;
     if (!exports.bool(text)) {
       text = "";
@@ -553,11 +553,8 @@
     if (text.constructor !== String) {
       text = String(text);
     }
-    if (text.length >= length) {
-      return text;
-    }
     modifyText = function(text) {
-      if (text.length === length) {
+      if (success(text)) {
         return text;
       } else {
         return modifyText(operation(text));
@@ -572,7 +569,9 @@
     }
     return abstractPad((function(text) {
       return chr + text;
-    }), text, length);
+    }), (function(text) {
+      return text.length >= length;
+    }), text);
   };
 
   exports.rpad = function(text, length, chr) {
@@ -581,17 +580,20 @@
     }
     return abstractPad((function(text) {
       return text + chr;
-    }), text, length);
+    }), (function(text) {
+      return text.length >= length;
+    }), text);
   };
 
   exports.antipad = function(text, chr) {
     if (chr == null) {
       chr = "0";
     }
-    while (text[text.length - 1] === chr) {
-      text = text.slice(0, text.length - 1);
-    }
-    return text;
+    return abstractPad((function(text) {
+      return text.slice(0, text.length - 1);
+    }), (function(text) {
+      return text[text.length - 1] === chr;
+    }), text);
   };
 
   exports.jaccardIndex = function(set1, set2) {

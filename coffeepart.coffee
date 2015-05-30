@@ -281,27 +281,33 @@ exports.joinF = (functs...) -> (args...) -> _.map functs, (f) => f.apply @, args
 
 exports.filename = (path) -> path.replace /^.*[\\\/]/, ''
 
-exports.abstractPad = abstractPad = (operation, text, length) ->
+exports.abstractPad = abstractPad = (operation, success, text) ->
     if not exports.bool(text) then text = ""
     if text.constructor isnt String then text = String text
-    if text.length >= length then return text
 
     modifyText = (text) ->
-        if text.length is length then return text
+        if success(text) then return text
         else modifyText operation(text)
 
     modifyText text
 
 exports.pad = (text,length,chr=0) ->
-    abstractPad ((text) -> chr + text), text, length
-exports.rpad = (text,length,chr=0) ->
-    abstractPad ((text) -> text + chr), text, length
+    abstractPad(
+        ((text) -> chr + text),
+        ((text) -> text.length >= length),
+        text)
 
+exports.rpad = (text,length,chr=0) ->
+    abstractPad(
+        ((text) -> text + chr),
+        ((text) -> text.length >= length),
+        text)
 
 exports.antipad = (text,chr="0") ->
-    while text[text.length - 1] is chr
-        text = text.slice(0, text.length - 1)
-    text
+    abstractPad(
+        ((text) -> text.slice(0, text.length - 1)),
+        ((text) -> text[text.length - 1] is chr),
+        text)
 
 # http://en.wikipedia.org/wiki/Jaccard_index
 exports.jaccardIndex = (set1, set2) ->
