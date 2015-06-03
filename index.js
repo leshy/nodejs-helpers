@@ -66,12 +66,12 @@ exports.uuid = exports.generateid = exports.rndid = function (len,chars) {
 }
 
 
-exports.RandomFloat = exports.randrange = function RandomFloat(x) { return Math.random() * x }
-exports.RandomInt = function RandomInt(x) { return Math.round(exports.RandomFloat(x)) }
-exports.RandomBool = function RandomBool() { return Boolean(exports.RandomInt(1)) }
-exports.RandomSign = function RandomSign() { return  (exports.RandomBool()) ? 1 : -1 }
-exports.RandomWalk = function RandomWalk(x,step) { return x + (exports.RandomSign() * exports.RandomInt(step))  }
-exports.RandomWalkFloat = function RandomWalkFloat(x,step) { return x + (exports.RandomSign() * exports.RandomFloat(step))  }
+exports.RandomFloat = exports.randomFloat = exports.randrange = function RandomFloat(x) { return Math.random() * x }
+exports.RandomInt = exports.randomInt = function RandomInt(x) { return Math.round(exports.RandomFloat(x)) }
+exports.RandomBool = exports.randomBool = function RandomBool() { return Boolean(exports.RandomInt(1)) }
+exports.RandomSign = exports.randomSign = function RandomSign() { return  (exports.RandomBool()) ? 1 : -1 }
+exports.RandomWalk = exports.randomWalk = function RandomWalk(x,step) { return x + (exports.RandomSign() * exports.RandomInt(step))  }
+exports.RandomWalkFloat = exports.randomWalkFloat = function RandomWalkFloat(x,step) { return x + (exports.RandomSign() * exports.RandomFloat(step))  }
 
 // select a random object from an array (stuff) 
 // but it uses getweight function to figure out the probability weights for its selection
