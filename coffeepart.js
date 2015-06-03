@@ -183,24 +183,6 @@
     }
   };
 
-  exports.depthFirst = function(target, clone, callback) {
-    var key, response;
-    if (target.constructor === Object || target.constructor === Array) {
-      for (key in target) {
-        this.depthfirst(target[key], function(data) {
-          if (!data) {
-            return delete target[key];
-          } else {
-            return target[key] = data;
-          }
-        });
-      }
-      return target;
-    } else {
-      return response = callback(target);
-    }
-  };
-
   exports.depthFirst = depthFirst = function(target, options, callback) {
     if (options == null) {
       options = {};

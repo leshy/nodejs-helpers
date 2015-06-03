@@ -112,15 +112,6 @@ queue::done = (callback) ->
 
 
 # depthfirst search and modify through JSON
-exports.depthFirst = (target, clone, callback) ->
-    if target.constructor is Object or target.constructor is Array
-        for key of target
-            @depthfirst target[key], (data) -> if not data then delete target[key] else target[key] = data
-        target
-    else response = callback(target)
-
-
-# depthfirst search and modify through JSON
 exports.depthFirst = depthFirst = (target, options={}, callback) ->
     if target.constructor is Object or target.constructor is Array
         exports.uniMap _.clone(target), (val,key) ->
