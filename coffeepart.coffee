@@ -112,12 +112,25 @@ queue::done = (callback) ->
 
 
 # depthfirst search and modify through JSON
-depthFirst = (target, clone, callback) ->
+exports.depthFirst = (target, clone, callback) ->
     if target.constructor is Object or target.constructor is Array
         for key of target
             @depthfirst target[key], (data) -> if not data then delete target[key] else target[key] = data
         target
     else response = callback(target)
+
+
+# depthfirst search and modify through JSON
+exports.depthFirst = depthFirst = (target, options={}, callback) ->
+    if target.constructor is Object or target.constructor is Array
+        exports.uniMap _.clone(target), (val,key) ->
+            depthFirst val, exports.extend(options, key: key), callback
+    else callback target, options.key
+
+
+exports.strHas = (target,strings...) ->
+    if target?.constructor isnt String then false
+    else Boolean(_.find strings, (str) -> target.indexOf(str) isnt -1)
 
 exports.random = (stuff) -> stuff[Math.floor(Math.random() * stuff.length)]
 
@@ -206,7 +219,7 @@ exports.dictMap = exports.dictmap = (dict,callback) ->
 
 
 exports.uniMap = exports.unimap = (something,callback) ->
-    if something?.constructor is Array then return _.map something, callback
+    if something?.constructor is Array then return _.map _.clone(something), callback
     if something?.constructor is Object then return exports.dictMap something,callback
     return callback(something)
 

@@ -183,7 +183,7 @@
     }
   };
 
-  depthFirst = function(target, clone, callback) {
+  exports.depthFirst = function(target, clone, callback) {
     var key, response;
     if (target.constructor === Object || target.constructor === Array) {
       for (key in target) {
@@ -198,6 +198,33 @@
       return target;
     } else {
       return response = callback(target);
+    }
+  };
+
+  exports.depthFirst = depthFirst = function(target, options, callback) {
+    if (options == null) {
+      options = {};
+    }
+    if (target.constructor === Object || target.constructor === Array) {
+      return exports.uniMap(_.clone(target), function(val, key) {
+        return depthFirst(val, exports.extend(options, {
+          key: key
+        }), callback);
+      });
+    } else {
+      return callback(target, options.key);
+    }
+  };
+
+  exports.strHas = function() {
+    var strings, target;
+    target = arguments[0], strings = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    if ((target != null ? target.constructor : void 0) !== String) {
+      return false;
+    } else {
+      return Boolean(_.find(strings, function(str) {
+        return target.indexOf(str) !== -1;
+      }));
     }
   };
 
@@ -361,7 +388,7 @@
 
   exports.uniMap = exports.unimap = function(something, callback) {
     if ((something != null ? something.constructor : void 0) === Array) {
-      return _.map(something, callback);
+      return _.map(_.clone(something), callback);
     }
     if ((something != null ? something.constructor : void 0) === Object) {
       return exports.dictMap(something, callback);
