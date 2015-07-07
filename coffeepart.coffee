@@ -138,6 +138,12 @@ exports.shuffle = (stuff) ->
 
 exports.commenterr = (err,comment) -> if err then comment + ": " + err else undefined
 
+
+exports._extend = uextend = (targets...) ->
+  targets = _.flatten targets
+  targets.unshift {}
+  _.extend.apply @, targets
+
 # immutable recursive extend
 exports.extend = extend = (targets...) ->
     destination = {}
@@ -396,9 +402,21 @@ exports.unshift = (array, elements...) ->
     array.unshift.apply array, elements
     array
 
-exports.push = (array, elements...) ->
-    array.push.apply array, elements
-    array
+exports.filterFalse = (array) -> _.filter array, exports.id
+
+exports.push = (array=[], elements...) ->
+  if array.constructor  isnt Array then array = [ array ]
+  else array = _.clone array
+
+  elements = _.filter _.flatten(elements), exports.id
+  if elements.length then array.push.apply array, elements
+  array
+
+exports.pushm = (array=[], elements...) ->
+  elements = _.filter elements, exports.id
+  if elements.length then array.push.apply array, elements
+  array
+
 
 
 #
@@ -422,3 +440,6 @@ exports.swap = (dict) ->
 exports.bool = (something) ->
     if something is 0 then true
     else Boolean something
+
+
+exports.defer = (f) -> setTimeout f, 0

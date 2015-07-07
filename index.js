@@ -8,32 +8,32 @@ var toArray = exports.toArray = function(arg) { return Array.prototype.slice.cal
 // Takes a date object and returns a string
 exports.prettyDate = function(date){
     if (date.constructor != Date) { date = new Date(date) }
-	var diff = (((new Date()).getTime() - date.getTime())) / 1000
-    var day_diff = Math.floor(Math.abs(diff / 86400)) 
+    var diff = (((new Date()).getTime() - date.getTime())) / 1000
+    var day_diff = Math.floor(Math.abs(diff / 86400))
     if (diff < 0) { day_diff *= -1 }
 
-	if ( isNaN(day_diff) )
-		return 'dunno';
-	
-	return day_diff == 0 && (
-		diff < -7200 && "in " + Math.floor(Math.abs(diff / 3600)) + " hours" ||
+    if ( isNaN(day_diff) )
+        return 'dunno';
+
+    return day_diff == 0 && (
+        diff < -7200 && "in " + Math.floor(Math.abs(diff / 3600)) + " hours" ||
             diff < -3600 && "in 1 hour" ||
             diff < -120 && "in " + Math.floor(Math.abs(diff / 60)) + " minutes" ||
             diff < -60 && "in 1 minute" ||
-			diff < 60 && "just now" ||
-			diff < 120 && "1 minute ago" ||
-			diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
-			diff < 7200 && "1 hour ago" ||
-			diff < 86400 && Math.floor( diff / 3600 ) + " hours ago") ||
-        
+            diff < 60 && "just now" ||
+            diff < 120 && "1 minute ago" ||
+            diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
+            diff < 7200 && "1 hour ago" ||
+            diff < 86400 && Math.floor( diff / 3600 ) + " hours ago") ||
+
         day_diff < -31  && Math.ceil( Math.abs(day_diff / 31) ) + " months ago" ||
-	    day_diff < -7 && "in " + Math.ceil( day_diff / 7 ) + " weeks" ||
-	    day_diff < -1 && "in " + day_diff + " days" ||
-	    day_diff == -1 && "tomorrow at " + date.getHours() + ":" + date.getMinutes() ||
-		day_diff == 1 && "yesterday" ||
-		day_diff < 7 && day_diff + " days ago" ||
-		day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago" ||
-	    Math.ceil( day_diff / 31 ) + " months ago";
+        day_diff < -7 && "in " + Math.ceil( day_diff / 7 ) + " weeks" ||
+        day_diff < -1 && "in " + day_diff + " days" ||
+        day_diff == -1 && "tomorrow at " + date.getHours() + ":" + date.getMinutes() ||
+        day_diff == 1 && "yesterday" ||
+        day_diff < 7 && day_diff + " days ago" ||
+        day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago" ||
+        Math.ceil( day_diff / 31 ) + " months ago";
 
 }
 
@@ -55,8 +55,7 @@ exports.prettySize = function(bytes) {
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 };
 
-
-exports.uuid = exports.generateid = exports.rndid = function (len,chars) { 
+exports.uuid = exports.generateid = exports.rndid = function (len,chars) {
     if (!len) { len = 20 }
     if (!chars) { chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('') }
     var uuid = []
@@ -73,7 +72,7 @@ exports.RandomSign = exports.randomSign = function RandomSign() { return  (expor
 exports.RandomWalk = exports.randomWalk = function RandomWalk(x,step) { return x + (exports.RandomSign() * exports.RandomInt(step))  }
 exports.RandomWalkFloat = exports.randomWalkFloat = function RandomWalkFloat(x,step) { return x + (exports.RandomSign() * exports.RandomFloat(step))  }
 
-// select a random object from an array (stuff) 
+// select a random object from an array (stuff)
 // but it uses getweight function to figure out the probability weights for its selection
 // example:
 // console.log(helpers.weightedRandom([1,2,3], function(n) { return n }))
@@ -81,12 +80,12 @@ exports.RandomWalkFloat = exports.randomWalkFloat = function RandomWalkFloat(x,s
 exports.weightedRandom = function(stuff,getweight) {
 
     if (stuff.length == 1) { return _.first(stuff) }
-    
+
     var weights = exports.normalize(_.map(stuff,getweight))
     var target = Math.random()
-    
+
     var index = 0
-    _.reduce(weights,function (total,n) { 
+    _.reduce(weights,function (total,n) {
         total += n
 
         if (total < target) { index = index + 1 }
@@ -94,7 +93,7 @@ exports.weightedRandom = function(stuff,getweight) {
 
     }, 0 )
 
-    return stuff[index]    
+    return stuff[index]
 }
 
 
@@ -120,10 +119,10 @@ exports.throwToCallback = function (f) {
 exports.identity = function (x) { return x }
 
 exports.copy = function (obj) {
-    if (obj.constructor == Array) { 
+    if (obj.constructor == Array) {
         return _.map(obj,exports.identity)
     }
-    
+
     if (obj.constructor == Object) {
         return _.extend({},obj)
     }
@@ -133,7 +132,7 @@ exports.copy = function (obj) {
 
 exports.capitalize = function (str) { if (str) { return str.charAt(0).toUpperCase() + str.slice(1) } }
 
-// this thing should accept an non iterable object and callback only once.. 
+// this thing should accept an non iterable object and callback only once..
 // try to iterate through an object, call a callback with the object itself if you fail
 exports.maybeiterate = function (something,callback) {
     if (!something) { callback(); return }
@@ -181,7 +180,7 @@ exports.isEmpty = function (ob){
 
 exports.makedict = makedict = function (elements,key) {
     dict = {}
-    
+
     _.map(elements, function (obj) {
         if (key.constructor == String) {
             keyval = obj[key]
@@ -234,4 +233,3 @@ _.extend(exports, require('./coffeepart'))
 _.extend(exports, livescriptpart = require('./livescriptpart'))
 
 _.extend(exports, require('./wrappers'))
-
