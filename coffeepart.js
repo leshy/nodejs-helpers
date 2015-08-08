@@ -403,7 +403,7 @@
   };
 
   exports.shortTime = function(time) {
-    var appendzero;
+    var appendzero, hours, minutes, ret, seconds;
     if (time == null) {
       time = new Date();
     }
@@ -417,7 +417,19 @@
     if (time.constructor !== Date) {
       time = new Date(time);
     }
-    return appendzero(time.getHours()) + ":" + appendzero(time.getMinutes()) + ":" + appendzero(time.getSeconds());
+    hours = time.getHours() - 1;
+    minutes = time.getMinutes();
+    seconds = time.getSeconds();
+    ret = "";
+    ret = appendzero(seconds);
+    if (!minutes) {
+      return ret;
+    }
+    ret = appendzero(minutes) + ":" + ret;
+    if (!hours) {
+      return ret;
+    }
+    return ret = appendzero(hours) + ":" + ret;
   };
 
   exports.normalizeList = function(list) {

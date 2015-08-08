@@ -236,7 +236,21 @@ exports.shortTime = ( time = new Date()) ->
         n
 
     if time.constructor isnt Date then time = new Date(time)
-    appendzero(time.getHours()) + ":" + appendzero(time.getMinutes()) + ":" + appendzero(time.getSeconds())
+    hours = time.getHours() - 1
+    minutes = time.getMinutes()
+    seconds = time.getSeconds()
+
+    ret = ""
+    ret = appendzero(seconds)
+
+    if not minutes then return ret
+
+    ret = appendzero(minutes) + ":" + ret
+
+    if not hours then return ret
+
+    ret = appendzero(hours) + ":" + ret
+
 
 exports.normalizeList = (list) ->
     total = _.reduce list, (total=0,n) -> total + n
@@ -376,8 +390,6 @@ exports.difference = (array1, array2, compare1, compare2) ->
     a1compare = _.map array1, (x) -> { c: compare1(x), x: x }
     a2compare = _.map array2, (x) -> { c: compare2(x), x: x }
 
-    #console.log 'a1compare', a1compare
-    #console.log 'a2compare', a2compare
     a1intersection = []
 
     _.each a1compare, (x1) ->
