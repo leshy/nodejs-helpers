@@ -44,6 +44,14 @@
           return f.call(this, arg);
         });
       };
+    },
+    dCurry: function(f, cOptions){
+      return function(options){
+        var args;
+        args = slice$.call(arguments, 1);
+        args.unshift(_.extend(cOptions, options));
+        return f.apply(this, args);
+      };
     }
   };
 }).call(this);

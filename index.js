@@ -232,3 +232,5 @@ searchCache = function (moduleName, callback) {
 _.extend(exports, require('./coffeepart'))
 
 _.extend(exports, require('./wrappers'))
+
+exports.dCurry = exports.wrap.dCurry

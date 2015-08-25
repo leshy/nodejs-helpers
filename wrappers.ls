@@ -1,5 +1,4 @@
 _ = require 'underscore'
-
 exports.wrap =
   # will execute an asyc function once, and cache the result for the next time
   once: (f) ->
@@ -29,3 +28,8 @@ exports.wrap =
   multi: (f) -> (...args) -> _.map args, (arg) ->
     if arg@@ isnt Array then arg = [ arg ]
     f.call @, arg
+
+  dCurry: (f, cOptions) -> (options, ...args) ->
+    args.unshift _.extend cOptions, options
+    f.apply @, args
+
