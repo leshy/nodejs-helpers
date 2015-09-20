@@ -439,9 +439,9 @@ exports.pushm = (array=[], elements...) ->
 exports.sneakyPromise = class sneakyPromise
     constructor: (@promise) ->
     gimme: -> @promise
+    unpack: -> @promise
 
-exports.sneaky = (promise) ->
-    new exports.sneakyPromise promise
+exports.sneaky = (promise) -> new exports.sneakyPromise promise
 
 exports.swap = (dict) ->
     res = {}

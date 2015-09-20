@@ -179,16 +179,21 @@ exports.dCurry = (test) ->
 
 
 exports.dCurryPlusCurry = (test) ->
-  bla = (options, x, y) -->
-    console.log 'bla called',options,x,y
-    return [ options, x, y ]
+  bla = (options, x, y) --> return [ options, x, y ]
 
   bla1 = h.dCurry bla, test1: 8, bla: 'bla', a: 3
   bla2 = h.dCurry bla1, test1: 0, bla: 'xx', b: 5
 
+  ret = bla2 { la: 3, test1: 9 }, 1 2 # test without curry
+  test.deepEqual ret, [ { test1: 9, bla: 'xx', a: 3, b: 5, la: 3 }, 1, 2]
+
+  # test with curry
   bla3 = bla2 { la: 3, test1: 9 }
   bla4 = bla3 1
   ret = bla4 2
-  
   test.deepEqual ret, [ { test1: 9, bla: 'xx', a: 3, b: 5, la: 3 }, 1, 2]
+
+
   test.done()
+
+

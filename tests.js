@@ -268,9 +268,8 @@
     return test.done();
   };
   exports.dCurryPlusCurry = function(test){
-    var bla, bla1, bla2, bla3, bla4, ret;
+    var bla, bla1, bla2, ret, bla3, bla4;
     bla = curry$(function(options, x, y){
-      console.log('bla called', options, x, y);
       return [options, x, y];
     });
     bla1 = h.dCurry(bla, {
@@ -283,6 +282,19 @@
       bla: 'xx',
       b: 5
     });
+    ret = bla2({
+      la: 3,
+      test1: 9
+    }, 1, 2);
+    test.deepEqual(ret, [
+      {
+        test1: 9,
+        bla: 'xx',
+        a: 3,
+        b: 5,
+        la: 3
+      }, 1, 2
+    ]);
     bla3 = bla2({
       la: 3,
       test1: 9

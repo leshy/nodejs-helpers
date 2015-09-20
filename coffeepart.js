@@ -836,6 +836,10 @@
       return this.promise;
     };
 
+    sneakyPromise.prototype.unpack = function() {
+      return this.promise;
+    };
+
     return sneakyPromise;
 
   })();
