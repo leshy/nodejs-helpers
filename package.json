@@ -1,16 +1,14 @@
 {
-    "name": "helpers",
-    "version": "0.0.1",
-    "description": "rondom helper functions",
-    "private": true,
-    "author": {
-        "name": "Ivan Nikolic [lesh]",
-        "email": "lesh@sysphere.org"
-    },
-    "dependencies": {
-        "underscore": "1.x"
-    },
-    "main": "index"
+  "name": "helpers",
+  "version": "0.0.1",
+  "description": "rondom helper functions",
+  "private": true,
+  "author": {
+    "name": "Ivan Nikolic [lesh]",
+    "email": "lesh@sysphere.org"
+  },
+  "dependencies": {
+    "underscore": "^1.8.3"
+  },
+  "main": "index"
 }
-
-
