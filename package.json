@@ -1,14 +1,23 @@
 {
   "name": "helpers",
-  "version": "0.0.1",
-  "description": "rondom helper functions",
-  "private": true,
-  "author": {
-    "name": "Ivan Nikolic [lesh]",
-    "email": "lesh@sysphere.org"
-  },
+  "version": "1.0.0",
+  "description": "random helper functions",
+  "main": "index.js",
   "dependencies": {
     "underscore": "^1.8.3"
   },
-  "main": "index"
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leshy/nodejs-helpers.git"
+  },
+  "author": "lesh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leshy/nodejs-helpers/issues"
+  },
+  "homepage": "https://github.com/leshy/nodejs-helpers#readme"
 }
