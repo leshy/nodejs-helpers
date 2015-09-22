@@ -53,6 +53,7 @@
     "url": "https://github.com/leshy/nodejs-helpers/issues"
   },
   "dependencies": {
+    "async": "^1.4.2",
     "underscore": "^1.8.3"
   },
   "description": "random helper functions",

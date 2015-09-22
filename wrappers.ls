@@ -1,5 +1,5 @@
 _ = require 'underscore'
-h = require 'helpers'
+h = require './index'
 
 exports.wrap =
   # will execute an asyc (or sync) function once, and cache the result for the next time
@@ -12,14 +12,14 @@ exports.wrap =
     gotData = (...data) ->
       options.data = data
       options.state = 2
-      _.each options.callbacks, ->
+      _.each options.callbacks, ~> 
         h.cbca it, options.data
 
     ret = (cb) ->
       switch options.state
-        | 0 => options.state = 1; options.ret = f gotData
+        | 0 => options.state = 1; options.ret = f gotData.bind(@)
         | 1 => options.callbacks.push cb
-        | 2 => _.defer -> h.cbca cb, options.data
+        | 2 => _.defer ~> h.cbca cb, options.data
       
       options.ret
 

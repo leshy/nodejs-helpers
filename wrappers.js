@@ -2,7 +2,7 @@
 (function(){
   var _, h, slice$ = [].slice;
   _ = require('underscore');
-  h = require('helpers');
+  h = require('./index');
   exports.wrap = {
     once: function(f){
       var options, gotData, ret;
@@ -12,7 +12,7 @@
         callbacks: []
       };
       gotData = function(){
-        var data;
+        var data, this$ = this;
         data = slice$.call(arguments);
         options.data = data;
         options.state = 2;
@@ -21,10 +21,11 @@
         });
       };
       ret = function(cb){
+        var this$ = this;
         switch (options.state) {
         case 0:
           options.state = 1;
-          options.ret = f(gotData);
+          options.ret = f(gotData.bind(this));
           break;
         case 1:
           options.callbacks.push(cb);
