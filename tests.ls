@@ -145,25 +145,26 @@ exports.difference = (test) ->
 
 
 exports.once = (test) ->
-    cnt = 0
-    
-    testf = (callback) -> h.wait 100, ->
-        cnt += 1
-        callback undefined, 1
-        
-    testfd = h.wrap.once testf
+  cnt = 0
+  cbcnt = 0
 
-    cbcnt = 0
+  testf = (callback) ->
+    h.wait 100, ->
+      cnt += 1
+      callback undefined
+    return 'x'
 
-    testcb = (err,data) ->
-        cbcnt += data
-        if cbcnt is 3
-            test.equals cnt, 1
-            test.done()
+  testfd = h.wrap.once testf
 
-    testfd(testcb)
-    helpers.wait 10, -> testfd(testcb)
-    helpers.wait 50, -> testfd(testcb)
+  testcb = (err,data) ->
+      cbcnt += 1
+      if cbcnt is 3
+        test.done!
+
+  test.equals testfd(testcb), 'x'
+  h.wait 10, -> test.equals testfd(testcb), 'x'
+  h.wait 50, -> test.equals testfd(testcb), 'x'
+  h.wait 150, -> test.equals testfd(testcb), 'x'
 
 
 exports.dCurry = (test) ->
@@ -195,5 +196,6 @@ exports.dCurryPlusCurry = (test) ->
 
 
   test.done()
+
 
 

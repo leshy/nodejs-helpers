@@ -212,29 +212,32 @@
     return test.done();
   };
   exports.once = function(test){
-    var cnt, testf, testfd, cbcnt, testcb;
+    var cnt, cbcnt, testf, testfd, testcb;
     cnt = 0;
+    cbcnt = 0;
     testf = function(callback){
-      return h.wait(100, function(){
+      h.wait(100, function(){
         cnt += 1;
-        return callback(undefined, 1);
+        return callback(undefined);
       });
+      return 'x';
     };
     testfd = h.wrap.once(testf);
-    cbcnt = 0;
     testcb = function(err, data){
-      cbcnt += data;
+      cbcnt += 1;
       if (cbcnt === 3) {
-        test.equals(cnt, 1);
         return test.done();
       }
     };
-    testfd(testcb);
-    helpers.wait(10, function(){
-      return testfd(testcb);
+    test.equals(testfd(testcb), 'x');
+    h.wait(10, function(){
+      return test.equals(testfd(testcb), 'x');
     });
-    return helpers.wait(50, function(){
-      return testfd(testcb);
+    h.wait(50, function(){
+      return test.equals(testfd(testcb), 'x');
+    });
+    return h.wait(150, function(){
+      return test.equals(testfd(testcb), 'x');
     });
   };
   exports.dCurry = function(test){

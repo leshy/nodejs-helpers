@@ -1,8 +1,8 @@
 _ = require 'underscore'
+h = require 'helpers'
 
 exports.wrap =
-
-  # will execute an asyc function once, and cache the result for the next time
+  # will execute an asyc (or sync) function once, and cache the result for the next time
   once: (f) ->
     options =
       state: 0
@@ -12,18 +12,16 @@ exports.wrap =
     gotData = (...data) ->
       options.data = data
       options.state = 2
-      _.each options.callbacks, (callback) ->
-        callback.apply @, options.data
+      _.each options.callbacks, ->
+        h.cbca it, options.data
 
-    ret = (callback) ->
-      if options.state is 2
-        _.defer -> callback.apply @, options.data
-
-      options.callbacks.push callback
-
-      if options.state is 0
-        options.state = 1
-        f gotData
+    ret = (cb) ->
+      switch options.state
+        | 0 => options.state = 1; options.ret = f gotData
+        | 1 => options.callbacks.push cb
+        | 2 => _.defer -> h.cbca cb, options.data
+      
+      options.ret
 
     ret
 
@@ -32,8 +30,10 @@ exports.wrap =
     f.call @, arg
 
   # dict curry
-  dCurry: (f, cOptions)
-    -> (options, ...args) ->
+  dCurry: (f, cOptions) ->
+    (options, ...args) ->
       args.unshift _.extend cOptions, options
       f.apply @, args
+
+
 

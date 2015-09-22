@@ -1,23 +1,77 @@
 {
-  "name": "helpers",
-  "version": "1.0.1",
-  "description": "random helper functions",
-  "main": "index.js",
+  "_args": [
+    [
+      "helpers@git://github.com/leshy/nodejs-helpers.git",
+      "/home/lesh/coding/bitcoin/bomber"
+    ]
+  ],
+  "_from": "git://github.com/leshy/nodejs-helpers.git",
+  "_id": "helpers@1.0.0",
+  "_inCache": true,
+  "_location": "/helpers",
+  "_phantomChildren": {},
+  "_requested": {
+    "hosted": {
+      "directUrl": "https://raw.githubusercontent.com/leshy/nodejs-helpers/master/package.json",
+      "gitUrl": "git://github.com/leshy/nodejs-helpers.git",
+      "httpsUrl": "git+https://github.com/leshy/nodejs-helpers.git",
+      "shortcut": "github:leshy/nodejs-helpers",
+      "ssh": "git@github.com:leshy/nodejs-helpers.git",
+      "sshUrl": "git+ssh://git@github.com/leshy/nodejs-helpers.git",
+      "type": "github"
+    },
+    "name": "helpers",
+    "raw": "helpers@git://github.com/leshy/nodejs-helpers.git",
+    "rawSpec": "git://github.com/leshy/nodejs-helpers.git",
+    "scope": null,
+    "spec": "git://github.com/leshy/nodejs-helpers.git",
+    "type": "hosted"
+  },
+  "_requiredBy": [
+    "/",
+    "/abstractman",
+    "/backbone4000",
+    "/collections",
+    "/lego",
+    "/logger2",
+    "/logger3",
+    "/lweb3",
+    "/ribcage",
+    "/subscriptionman2",
+    "/validator2",
+    "/validator2-extras"
+  ],
+  "_resolved": "git://github.com/leshy/nodejs-helpers.git#e7a669027ba09e841979543f8a6f8bbb85402919",
+  "_shasum": "2b4b84e958155a154eda476d84c24580035c0e85",
+  "_shrinkwrap": null,
+  "_spec": "helpers@git://github.com/leshy/nodejs-helpers.git",
+  "_where": "/home/lesh/coding/bitcoin/bomber",
+  "author": {
+    "name": "lesh"
+  },
+  "bugs": {
+    "url": "https://github.com/leshy/nodejs-helpers/issues"
+  },
   "dependencies": {
     "underscore": "^1.8.3"
   },
+  "description": "random helper functions",
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "gitHead": "e7a669027ba09e841979543f8a6f8bbb85402919",
+  "homepage": "https://github.com/leshy/nodejs-helpers#readme",
+  "installable": true,
+  "license": "ISC",
+  "main": "index.js",
+  "name": "helpers",
+  "optionalDependencies": {},
+  "readme": "helpers\n====\n\nrandom mini useful functions, look at the code for documentation",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leshy/nodejs-helpers.git"
   },
-  "author": "lesh",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/leshy/nodejs-helpers/issues"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/leshy/nodejs-helpers#readme"
+  "version": "1.0.0"
 }

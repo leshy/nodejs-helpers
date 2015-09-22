@@ -101,6 +101,9 @@ exports.cbc = cbc = (args...) ->
     if not args.length then return
     if callback = args.shift() then callback.apply @, args
 
+exports.cbca = cbca = (callback, args) ->
+  if callback then callback.apply @, args
+
 queue::triggerDone = ->
     @_done = true
     _.map @doneSubs, (sub) =>
