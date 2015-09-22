@@ -12,15 +12,13 @@ exports.wrap =
     gotData = (...data) ->
       options.data = data
       options.state = 2
-      _.each options.callbacks, ~> 
-        h.cbca it, options.data
+      _.each options.callbacks, ~> h.cbca it, options.data
 
     ret = (cb) ->
       switch options.state
-        | 0 => options.state = 1; options.ret = f gotData.bind(@)
+        | 0 => options.state = 1; options.ret = f.call @, gotData
         | 1 => options.callbacks.push cb
         | 2 => _.defer ~> h.cbca cb, options.data
-      
       options.ret
 
     ret

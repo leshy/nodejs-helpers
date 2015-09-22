@@ -25,7 +25,7 @@
         switch (options.state) {
         case 0:
           options.state = 1;
-          options.ret = f(gotData.bind(this));
+          options.ret = f.call(this, gotData);
           break;
         case 1:
           options.callbacks.push(cb);
