@@ -134,11 +134,11 @@ exports.capitalize = function (str) { if (str) { return str.charAt(0).toUpperCas
 
 // this thing should accept an non iterable object and callback only once..
 // try to iterate through an object, call a callback with the object itself if you fail
-exports.maybeiterate = function (something,callback) {
+exports.maybeiterate = exports.maybeIterate = exports.mIter = function (something,callback) {
     if (!something) { callback(); return }
 
     if ((something.constructor == Array) || (something.constructor == Object)) {
-        _.map(something,callback)
+        _.each(something,callback)
         callback();
         return
     }

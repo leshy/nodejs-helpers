@@ -408,7 +408,6 @@ exports.difference = (array1, array2, compare1, compare2) ->
 exports.objorclass = objorclass = (x,attr) ->
     if typeof(x) is 'object' then x[attr] else x::[attr]
 
-
 exports.array = (something) ->
     if not something then return []
     if something.constructor isnt Array then [ something ] else something
@@ -458,3 +457,14 @@ exports.bool = (something) ->
 
 
 exports.defer = (f) -> setTimeout f, 0
+
+exports.maybeMap = (x,cb) ->
+  if x.constructor is Array then return _.map x, cb
+  else cb x
+
+exports.cbtp = (resolve,reject) ->
+  (err,data) -> if err then return reject err else return resolve data
+
+exports.defer = (cb) ->
+  if not cb then return
+  _.defer cb

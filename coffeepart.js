@@ -875,4 +875,29 @@
     return setTimeout(f, 0);
   };
 
+  exports.maybeMap = function(x, cb) {
+    if (x.constructor === Array) {
+      return _.map(x, cb);
+    } else {
+      return cb(x);
+    }
+  };
+
+  exports.cbtp = function(resolve, reject) {
+    return function(err, data) {
+      if (err) {
+        return reject(err);
+      } else {
+        return resolve(data);
+      }
+    };
+  };
+
+  exports.defer = function(cb) {
+    if (!cb) {
+      return;
+    }
+    return _.defer(cb);
+  };
+
 }).call(this);
