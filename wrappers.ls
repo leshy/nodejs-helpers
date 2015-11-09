@@ -14,12 +14,12 @@ exports.wrap =
       options.state = 2
       _.each options.callbacks, ~> h.cbca it, options.data
 
-    ret = (cb) ->
+    ret = (...args, cb) ->
       switch options.state
-        | 0 => options.state = 1; options.ret = f.call @, gotData
+        | 0 => options.state = 1; options.ret = console.log f.apply @, args.concat(gotData)
         | 1 => options.callbacks.push cb
         | 2 => _.defer ~> h.cbca cb, options.data
-      options.ret
+      return options.ret
 
     ret
 
@@ -32,6 +32,5 @@ exports.wrap =
     (options, ...args) ->
       args.unshift _.extend cOptions, options
       f.apply @, args
-
 
 

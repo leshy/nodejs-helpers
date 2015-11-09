@@ -408,6 +408,12 @@
     };
   };
 
+  exports.maybeWait = function(ms, callback) {
+    if (callback) {
+      return exports.wait(ms, callback);
+    }
+  };
+
   exports.shortTime = function(time) {
     var appendzero, hours, minutes, ret, seconds;
     if (time == null) {

@@ -232,6 +232,9 @@ exports.setTimeout = exports.wait = exports.sleep = exports.delay = (ms,callback
     id = setTimeout wrappedCallback, ms
     (-> if not done then clearTimeout id; return not done)
 
+exports.maybeWait = (ms, callback) ->
+  if callback then exports.wait ms, callback
+
 exports.shortTime = ( time = new Date()) ->
     appendzero = (n) ->
         n = String(n)

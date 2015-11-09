@@ -20,12 +20,13 @@
           return h.cbca(it, options.data);
         });
       };
-      ret = function(cb){
-        var this$ = this;
+      ret = function(){
+        var i$, args, cb, this$ = this;
+        args = 0 < (i$ = arguments.length - 1) ? slice$.call(arguments, 0, i$) : (i$ = 0, []), cb = arguments[i$];
         switch (options.state) {
         case 0:
           options.state = 1;
-          options.ret = f.call(this, gotData);
+          options.ret = console.log(f.apply(this, args.concat(gotData)));
           break;
         case 1:
           options.callbacks.push(cb);
