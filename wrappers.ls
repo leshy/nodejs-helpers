@@ -15,9 +15,9 @@ exports.wrap =
       _.each options.callbacks, ~> h.cbca it, options.data
 
     ret = (...args, cb) ->
+      options.callbacks.push cb
       switch options.state
         | 0 => options.state = 1; options.ret = console.log f.apply @, args.concat(gotData)
-        | 1 => options.callbacks.push cb
         | 2 => _.defer ~> h.cbca cb, options.data
       return options.ret
 

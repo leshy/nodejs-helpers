@@ -23,13 +23,11 @@
       ret = function(){
         var i$, args, cb, this$ = this;
         args = 0 < (i$ = arguments.length - 1) ? slice$.call(arguments, 0, i$) : (i$ = 0, []), cb = arguments[i$];
+        options.callbacks.push(cb);
         switch (options.state) {
         case 0:
           options.state = 1;
           options.ret = console.log(f.apply(this, args.concat(gotData)));
-          break;
-        case 1:
-          options.callbacks.push(cb);
           break;
         case 2:
           _.defer(function(){
