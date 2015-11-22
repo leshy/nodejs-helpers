@@ -648,7 +648,7 @@
   };
 
   exports.prettyNumber = function(number) {
-    return Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   exports.prettyDateFull = function(d) {
@@ -904,6 +904,16 @@
       return;
     }
     return _.defer(cb);
+  };
+
+  exports.fixBitcoinString = function(btc) {
+    if (btc !== 0) {
+      btc = exports.rtrim(btc, '0');
+    }
+    if (btc[btc.length - 1] === '.') {
+      btc = btc.slice(0, btc.length - 1);
+    }
+    return btc;
   };
 
 }).call(this);

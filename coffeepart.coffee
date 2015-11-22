@@ -165,9 +165,9 @@ exports.extendm = extendm = (destination,targets...) ->
     destination
 
 
+
 # operations for dealing with a dictionary of arrays
 # --------------------------------------------------
-
 exports.dictpush = (dict,key,value) ->
     if not arr = dict[key] then arr = dict[key] = []
     arr.push value
@@ -217,12 +217,10 @@ exports.dictMap = exports.dictmap = (dict,callback) ->
         res[key] = newvalue
     res
 
-
 exports.uniMap = exports.unimap = (something,callback) ->
     if something?.constructor is Array then return _.map _.clone(something), callback
     if something?.constructor is Object then return exports.dictMap something,callback
     return callback(something)
-
 
 # just reversing setTimeout arguments.. this is more practical for coffeescript
 # returns function that canceles setTimeout. that function returns true of false to indicate if cacelation request was executed too late
@@ -346,7 +344,7 @@ exports.jaccardIndex = (set1, set2) ->
     _.intersection(set1, set2).length / _.union(set1, set2).length
 
 exports.prettyNumber = (number) ->
-    Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
 exports.prettyDateFull = (d) ->
     if d.constructor isnt Date then d = new Date d
@@ -471,3 +469,8 @@ exports.cbtp = (resolve,reject) ->
 exports.defer = (cb) ->
   if not cb then return
   _.defer cb
+
+exports.fixBitcoinString = (btc) ->
+  if btc isnt 0 then btc = exports.rtrim btc, '0'
+  if btc[btc.length - 1] is '.' then btc = btc.slice 0, btc.length - 1
+  return btc
