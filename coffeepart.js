@@ -193,7 +193,7 @@
     if (options == null) {
       options = {};
     }
-    if (target.constructor === Object || target.constructor === Array) {
+    if (target && (target.constructor === Object || target.constructor === Array)) {
       return exports.uniMap(_.clone(target), function(val, key) {
         return depthFirst(val, exports.extend(options, {
           key: key

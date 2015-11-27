@@ -116,7 +116,7 @@ queue::done = (callback) ->
 
 # depthfirst search and modify through JSON
 exports.depthFirst = depthFirst = (target, options={}, callback) ->
-    if target.constructor is Object or target.constructor is Array
+    if target and (target.constructor is Object or target.constructor is Array)
         exports.uniMap _.clone(target), (val,key) ->
             depthFirst val, exports.extend(options, key: key), callback
     else callback target, options.key
@@ -211,6 +211,7 @@ exports.dictFromArray = (array,cb) ->
 exports.dictMap = exports.dictmap = (dict,callback) ->
     if dict.constructor is Array then dict = exports.makeDict dict
     res = {}
+
     _.map dict, (value,key) ->
         newvalue = callback(value,key)
         if newvalue is undefined then return
