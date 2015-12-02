@@ -559,9 +559,17 @@
   exports.makePath = exports.path = function() {
     var elements;
     elements = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-    return "/" + _.map(_.flatten(elements), function(element) {
+    elements = exports.mapFilter(elements, function(element) {
+      if (typeof element === "function" ? element(constructor !== String) : void 0) {
+        return void 0;
+      }
+      element = exports.trim(element);
+      if (element.length === 0) {
+        return void 0;
+      }
       return exports.trim(element, '\/');
-    }).join('/');
+    });
+    return "/" + elements.join('/');
   };
 
   exports.identity = function(x) {

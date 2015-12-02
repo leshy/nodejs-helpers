@@ -302,7 +302,13 @@ exports.rtrim = (str, chars="\\s") ->
     str.replace(new RegExp("[" + chars + "]+$", "g"), "")
 
 exports.makePath = exports.path = (elements...) ->
-    "/" + _.map(_.flatten(elements), (element) -> exports.trim element, '\/').join('/')
+    elements = exports.mapFilter elements, (element) ->
+        if element?constructor isnt String then return undefined
+        element = exports.trim(element)
+        if element.length is 0 then return undefined
+        return exports.trim(element, '\/')
+
+    return "/" + elements.join('/')
 
 exports.identity = (x) -> x
 
