@@ -23,18 +23,19 @@
       ret = function(){
         var i$, args, cb, this$ = this;
         args = 0 < (i$ = arguments.length - 1) ? slice$.call(arguments, 0, i$) : (i$ = 0, []), cb = arguments[i$];
-        if (options.state === 2) {
-          _.defer(function(){
-            return h.cbca(cb, options.data);
-          });
-        }
-        if (options.state === 1) {
-          options.callbacks.push(cb);
-        }
-        if (options.state === 0) {
+        switch (options.state) {
+        case 0:
           options.state = 1;
           options.callbacks.push(cb);
           options.ret = f.apply(this, args.concat(gotData));
+          break;
+        case 1:
+          options.callbacks.push(cb);
+          break;
+        case 2:
+          _.defer(function(){
+            return h.cbca(cb, options.data);
+          });
         }
         return options.ret;
       };
