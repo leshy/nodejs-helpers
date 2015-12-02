@@ -2,8 +2,10 @@ _ = require 'underscore'
 h = require './index'
 
 exports.wrap =
+
   # will execute an asyc (or sync) function once, and cache the result for the next time
   once: (f) ->
+    
     options =
       state: 0
       data: void
@@ -15,13 +17,15 @@ exports.wrap =
       _.each options.callbacks, ~> h.cbca it, options.data
 
     ret = (...args, cb) ->
-      switch options.state
-        # not running
-        | 0 => options.state = 1; options.callbacks.push(cb); options.ret = console.log f.apply @, args.concat(gotData)
-        # running
-        | 1 => options.callbacks.push cb
-        # finished
-        | 2 => _.defer ~> h.cbca cb, options.data
+      
+      # finished
+      if options.state is 2 then _.defer ~> h.cbca cb, options.data
+
+      # running
+      if options.state is 1 then options.callbacks.push cb
+
+      # not running
+      if options.state is 0 then options.state = 1; options.callbacks.push(cb); options.ret = f.apply @, args.concat(gotData)
       return options.ret
 
     ret
