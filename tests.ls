@@ -1,6 +1,8 @@
 helpers = h = require './index.js'
 async = require 'async'
 _ = require 'underscore'
+p = require 'bluebird'
+ph = require './promise'
 
 exports.returnorcallback = (test) -> 
     f1 = (n) -> n + 3
@@ -198,4 +200,17 @@ exports.dCurryPlusCurry = (test) ->
   test.done()
 
 
+exports.promiseRetry = (test) ->
+  counter = 0
+  testF = (target) -> -> new p (resolve,reject) ~>
+    counter := counter + 1
+    if counter is target then resolve "done " + counter
+    else reject "error " + counter
 
+  res = {} 
+  ph.retry( { delay: 5, times: 5 }, testF(3)).then (data) ->
+    test.equals data, "done 3"
+    counter := 0
+    ph.retry( { delay: 5, times: 2 }, testF(3)).catch (data) ->
+      test.equals data, "error 2"
+      test.done()
