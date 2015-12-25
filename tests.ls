@@ -171,8 +171,9 @@ exports.once = (test) ->
 
 exports.throttle = (test) ->
   callCount = 0
-  
+    
   targetF = h.wrap.throttle {}, (...data, callback) ->
+    test.equal @bla, 'xxx'
     test.deepEqual data, [ 3 ]
     h.wait 100, ->
       test.equal callCount, 0
@@ -182,11 +183,13 @@ exports.throttle = (test) ->
     test.deepEqual data, [ 1,2,3 ]    
     callCount := callCount + 1
     if callCount is 3 then test.done()
-      
-  targetF 1, cb
-  targetF 2, cb
 
-  h.wait 10, ~> targetF 3, cb
+  self = { bla: 'xxx' }
+  
+  targetF.call self, 1, cb
+  targetF.call self, 2, cb
+
+  h.wait 10, ~> targetF.call self, 3, cb
 
 exports.dCurry = (test) ->
   bla = (options, x, y) ->

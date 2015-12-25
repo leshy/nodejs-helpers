@@ -243,11 +243,12 @@
     });
   };
   exports.throttle = function(test){
-    var callCount, targetF, cb, this$ = this;
+    var callCount, targetF, cb, self, this$ = this;
     callCount = 0;
     targetF = h.wrap.throttle({}, function(){
       var i$, data, callback;
       data = 0 < (i$ = arguments.length - 1) ? slice$.call(arguments, 0, i$) : (i$ = 0, []), callback = arguments[i$];
+      test.equal(this.bla, 'xxx');
       test.deepEqual(data, [3]);
       return h.wait(100, function(){
         test.equal(callCount, 0);
@@ -263,10 +264,13 @@
         return test.done();
       }
     };
-    targetF(1, cb);
-    targetF(2, cb);
+    self = {
+      bla: 'xxx'
+    };
+    targetF.call(self, 1, cb);
+    targetF.call(self, 2, cb);
     return h.wait(10, function(){
-      return targetF(3, cb);
+      return targetF.call(self, 3, cb);
     });
   };
   exports.dCurry = function(test){

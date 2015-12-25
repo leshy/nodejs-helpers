@@ -40,29 +40,39 @@ exports.wrap =
       
     options = _.extend doptions, options
     
-    gotData = (...data) ->
-
-    argAggregate = (newArgs) -> options.args = doptions.argAggregator(newArgs, options.args)
-      
+    
+    argAggregate = (newArgs) -> options.args = doptions.argAggregator newArgs, options.args
+    
     startWait = ->
       options.state = 1
       h.wait options.time, startRun
 
-    startRun = ->
-      f.apply @, options.args.concat gotData(options.callbacks)
+    startRun = -> 
+      f.apply options.self, options.args.concat gotData(options.callbacks)
       options.state = 0
       options.args = []
+      options.callbacks = []
 
     gotData = (callbacks) -> (...data) ->
       _.each callbacks, (cb) -> cb.apply @, data
       
-    (...args, cb) ->
+    ret = (...args, cb) ->
       switch options.state
-        # not running
-        | 0 => options.callbacks.push(cb); argAggregate(args); startWait()
-        # running
-        | 1 => options.callbacks.push(cb); argAggregate(args)
       
+        # not running
+        | 0 =>
+          options.self = @
+          if cb then options.callbacks.push(cb)
+          argAggregate(args)
+          
+          startWait()
+          
+        # running
+        | 1 =>
+          options.callbacks.push(cb)
+          argAggregate(args)
+          
+      return void      
     
 
   multi: (f) -> (...args) -> _.map args, (arg) ->
