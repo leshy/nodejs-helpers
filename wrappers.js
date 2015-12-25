@@ -54,12 +54,14 @@
       argAggregate = function(newArgs){
         return options.args = doptions.argAggregator(newArgs, options.args);
       };
-      startWait = function(){
+      startWait = function(self){
         options.state = 1;
-        return h.wait(options.time, startRun);
+        return h.wait(options.time, function(){
+          return startRun(self);
+        });
       };
-      startRun = function(){
-        f.apply(options.self, options.args.concat(gotData(options.callbacks)));
+      startRun = function(self){
+        f.apply(self, options.args.concat(gotData(options.callbacks)));
         options.state = 0;
         options.args = [];
         return options.callbacks = [];
@@ -78,12 +80,11 @@
         args = 0 < (i$ = arguments.length - 1) ? slice$.call(arguments, 0, i$) : (i$ = 0, []), cb = arguments[i$];
         switch (options.state) {
         case 0:
-          options.self = this;
           if (cb) {
             options.callbacks.push(cb);
           }
           argAggregate(args);
-          startWait();
+          startWait(this);
           break;
         case 1:
           options.callbacks.push(cb);

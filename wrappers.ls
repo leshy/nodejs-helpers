@@ -43,12 +43,12 @@ exports.wrap =
     
     argAggregate = (newArgs) -> options.args = doptions.argAggregator newArgs, options.args
     
-    startWait = ->
+    startWait = (self) ->
       options.state = 1
-      h.wait options.time, startRun
+      h.wait options.time, -> startRun self
 
-    startRun = -> 
-      f.apply options.self, options.args.concat gotData(options.callbacks)
+    startRun = (self) -> 
+      f.apply self, options.args.concat gotData(options.callbacks)
       options.state = 0
       options.args = []
       options.callbacks = []
@@ -61,11 +61,10 @@ exports.wrap =
       
         # not running
         | 0 =>
-          options.self = @
           if cb then options.callbacks.push(cb)
           argAggregate(args)
           
-          startWait()
+          startWait(@)
           
         # running
         | 1 =>
