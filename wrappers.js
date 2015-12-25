@@ -41,6 +41,55 @@
       };
       return ret;
     },
+    throttle: function(options, f){
+      var doptions, gotData, argAggregate, startWait, startRun;
+      doptions = {
+        time: 50,
+        state: 0,
+        argAggregator: h.id,
+        args: [],
+        callbacks: []
+      };
+      options = _.extend(doptions, options);
+      gotData = function(){
+        var data;
+        data = slice$.call(arguments);
+      };
+      argAggregate = function(newArgs){
+        return options.args = doptions.argAggregator(newArgs, options.args);
+      };
+      startWait = function(){
+        options.state = 1;
+        return h.wait(options.time, startRun);
+      };
+      startRun = function(){
+        f.apply(this, options.args.concat(gotData(options.callbacks)));
+        options.state = 0;
+        return options.args = [];
+      };
+      gotData = function(callbacks){
+        return function(){
+          var data;
+          data = slice$.call(arguments);
+          return _.each(callbacks, function(cb){
+            return cb.apply(this, data);
+          });
+        };
+      };
+      return function(){
+        var i$, args, cb;
+        args = 0 < (i$ = arguments.length - 1) ? slice$.call(arguments, 0, i$) : (i$ = 0, []), cb = arguments[i$];
+        switch (options.state) {
+        case 0:
+          options.callbacks.push(cb);
+          argAggregate(args);
+          return startWait();
+        case 1:
+          options.callbacks.push(cb);
+          return argAggregate(args);
+        }
+      };
+    },
     multi: function(f){
       return function(){
         var args;

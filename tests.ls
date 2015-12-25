@@ -169,6 +169,25 @@ exports.once = (test) ->
   h.wait 150, -> test.equals testfd(testcb), 'x'
 
 
+exports.throttle = (test) ->
+  callCount = 0
+  
+  targetF = h.wrap.throttle {}, (...data, callback) ->
+    test.deepEqual data, [ 3 ]
+    h.wait 100, ->
+      test.equal callCount, 0
+      callback 1, 2, 3
+
+  cb = (...data) ->
+    test.deepEqual data, [ 1,2,3 ]    
+    callCount := callCount + 1
+    if callCount is 3 then test.done()
+      
+  targetF 1, cb
+  targetF 2, cb
+
+  h.wait 10, ~> targetF 3, cb
+
 exports.dCurry = (test) ->
   bla = (options, x, y) ->
     return [ options, x, y ]
@@ -179,7 +198,6 @@ exports.dCurry = (test) ->
   ret = bla2({ la: 3, test1: 9 }, 1,2)
   test.deepEqual ret, [ { test1: 9, bla: 'xx', a: 3, b: 5, la: 3 }, 1, 2]
   test.done()
-
 
 exports.dCurryPlusCurry = (test) ->
   bla = (options, x, y) --> return [ options, x, y ]
@@ -214,3 +232,5 @@ exports.promiseRetry = (test) ->
     ph.retry( { delay: 5, times: 2 }, testF(3)).catch (data) ->
       test.equals data, "error 2"
       test.done()
+
+

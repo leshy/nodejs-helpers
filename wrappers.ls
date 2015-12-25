@@ -6,7 +6,7 @@ exports.wrap =
   # will execute an asyc (or sync) function once, and cache the result for the next time
   once: (f) ->
     
-    options =
+    options = do
       state: 0
       data: void
       callbacks: []
@@ -28,6 +28,42 @@ exports.wrap =
       return options.ret
 
     ret
+
+  
+  throttle: (options, f) ->
+    doptions = do
+      time: 50
+      state: 0
+      argAggregator: h.id
+      args: []
+      callbacks: []
+      
+    options = _.extend doptions, options
+    
+    gotData = (...data) ->
+
+    argAggregate = (newArgs) -> options.args = doptions.argAggregator(newArgs, options.args)
+      
+    startWait = ->
+      options.state = 1
+      h.wait options.time, startRun
+
+    startRun = ->
+      f.apply @, options.args.concat gotData(options.callbacks)
+      options.state = 0
+      options.args = []
+
+    gotData = (callbacks) -> (...data) ->
+      _.each callbacks, (cb) -> cb.apply @, data
+      
+    (...args, cb) ->
+      switch options.state
+        # not running
+        | 0 => options.callbacks.push(cb); argAggregate(args); startWait()
+        # running
+        | 1 => options.callbacks.push(cb); argAggregate(args)
+      
+    
 
   multi: (f) -> (...args) -> _.map args, (arg) ->
     if arg@@ isnt Array then arg = [ arg ]
