@@ -76,19 +76,25 @@
         };
       };
       return ret = function(){
-        var i$, args, cb;
+        var i$, args, cb, pushData;
         args = 0 < (i$ = arguments.length - 1) ? slice$.call(arguments, 0, i$) : (i$ = 0, []), cb = arguments[i$];
+        pushData = function(){
+          if (cb != null) {
+            if (cb.constructor === Function) {
+              options.callbacks.push(cb);
+            } else {
+              args.push(cb);
+            }
+          }
+          return argAggregate(args);
+        };
         switch (options.state) {
         case 0:
-          if (cb) {
-            options.callbacks.push(cb);
-          }
-          argAggregate(args);
+          pushData();
           startWait(this);
           break;
         case 1:
-          options.callbacks.push(cb);
-          argAggregate(args);
+          pushData();
         }
       };
     },

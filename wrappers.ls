@@ -57,22 +57,21 @@ exports.wrap =
       _.each callbacks, (cb) -> cb.apply @, data
       
     ret = (...args, cb) ->
-      switch options.state
       
+      pushData = ->
+        if cb?
+          if cb@@ is Function then options.callbacks.push(cb)
+          else args.push cb
+
+        argAggregate(args)
+          
+      switch options.state
         # not running
-        | 0 =>
-          if cb then options.callbacks.push(cb)
-          argAggregate(args)
-          
-          startWait(@)
-          
+        | 0 => pushData(); startWait(@)
         # running
-        | 1 =>
-          options.callbacks.push(cb)
-          argAggregate(args)
+        | 1 => pushData()
           
-      return void      
-    
+      return void
 
   multi: (f) -> (...args) -> _.map args, (arg) ->
     if arg@@ isnt Array then arg = [ arg ]
