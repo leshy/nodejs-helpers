@@ -1,3 +1,5 @@
+#autocompile
+
 _ = require 'underscore'
 helpers = require './index'
 
@@ -357,9 +359,14 @@ exports.prettyDateFull = (d) ->
     if d.constructor isnt Date then d = new Date d
     d.getFullYear() + "/" + exports.pad(d.getMonth() + 1,2) + "/" + exports.pad(d.getDate(),2) + " " + helpers.getShortDay(d) + " at " + exports.pad(d.getHours(),2) + ":" + exports.pad(d.getMinutes(),2) + " (" + helpers.prettyDate(d) + ")"
 
+
 exports.basicTime = (d) ->
     if d.constructor isnt Date then d = new Date(d)
     return exports.pad(d.getHours(),2) + ":" + exports.pad(d.getMinutes(),2) + ":" + exports.pad(d.getSeconds(),2)
+
+exports.basicDate = (d) ->
+    if d.constructor isnt Date then d = new Date d
+    d.getFullYear() + "/" + exports.pad(d.getMonth() + 1,2) + "/" + exports.pad(d.getDate(),2) + " " + helpers.getShortDay(d)
 
 exports.Kilo = 1000
 exports.Mega = exports.Kilo * 1000
@@ -462,6 +469,7 @@ exports.swap = (dict) ->
 exports.bool = (something) ->
     if something is 0 then true
     else Boolean something
+
 
 
 exports.defer = (f) -> setTimeout f, 0

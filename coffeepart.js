@@ -673,6 +673,13 @@
     return exports.pad(d.getHours(), 2) + ":" + exports.pad(d.getMinutes(), 2) + ":" + exports.pad(d.getSeconds(), 2);
   };
 
+  exports.basicDate = function(d) {
+    if (d.constructor !== Date) {
+      d = new Date(d);
+    }
+    return d.getFullYear() + "/" + exports.pad(d.getMonth() + 1, 2) + "/" + exports.pad(d.getDate(), 2) + " " + helpers.getShortDay(d);
+  };
+
   exports.Kilo = 1000;
 
   exports.Mega = exports.Kilo * 1000;
