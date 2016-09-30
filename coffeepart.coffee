@@ -304,9 +304,9 @@ exports.rtrim = (str, chars="\\s") ->
     str.replace(new RegExp("[" + chars + "]+$", "g"), "")
 
 exports.makePath = exports.path = (elements...) ->
-    elements = exports.mapFilter elements, (element) ->
+    elements = exports.mapFilter _.flatten(elements), (element) ->
         if element?constructor isnt String then return undefined
-        element = exports.trim(element)
+        element = exports.trim element
         if element.length is 0 then return undefined
         return exports.trim(element, '\/')
 

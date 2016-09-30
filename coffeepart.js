@@ -559,7 +559,7 @@
   exports.makePath = exports.path = function() {
     var elements;
     elements = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-    elements = exports.mapFilter(elements, function(element) {
+    elements = exports.mapFilter(_.flatten(elements), function(element) {
       if (typeof element === "function" ? element(constructor !== String) : void 0) {
         return void 0;
       }
